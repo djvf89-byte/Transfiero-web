@@ -93,7 +93,7 @@ export function Footer() {
               <ul className="space-y-2.5">
                 <li>
                   <Link href="/como-funciona" className="text-sm text-gray-500 hover:text-gray-300 transition-colors">
-                    Sobre nosotros
+                    Cómo funciona
                   </Link>
                 </li>
                 <li>

@@ -53,7 +53,9 @@ export default async function MisComprasPage() {
         <div className="space-y-3">
           {operaciones.map((op) => {
             const requiereAccion =
-              op.estado === "PAGO_PENDIENTE" || op.estado === "COMPRADOR_CONFIRMADO"
+              op.estado === "PAGO_PENDIENTE" ||
+              op.estado === "PENDIENTE_CONFIRMACION_COMPRADOR" ||
+              op.estado === "COMPRADOR_CONFIRMADO"
             const gradiente = GRADIENTE_CATEGORIA[op.publicacion.categoria] ?? GRADIENTE_CATEGORIA.OTRO
             const icono = ICONO_CATEGORIA[op.publicacion.categoria] ?? "🎟"
 

@@ -50,6 +50,9 @@ export async function enviarEmailRecuperacion(email: string, token: string): Pro
   const url = `${BASE_URL}/auth/nueva-contrasena?token=${token}`
 
   if (!resend) {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("RESEND_API_KEY no configurado — no se pueden enviar emails de recuperación")
+    }
     console.log("\n[DEV — recuperar contraseña] Abre esta URL en el navegador:")
     console.log(url + "\n")
     return
