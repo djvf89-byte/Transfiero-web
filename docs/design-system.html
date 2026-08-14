@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transfiero — Sistema de Diseño Visual v1.1</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  :root {
+    --navy-950: #050E24;
+    --navy-900: #0C1B3F;
+    --navy-800: #102352;
+    --navy-700: #1B3A6B;
+    --navy-600: #1E4799;
+    --navy-500: #2563EB;
+    --navy-400: #3B82F6;
+    --navy-100: #DBEAFE;
+    --navy-50:  #EFF6FF;
+    --amber-500: #F59E0B;
+    --amber-400: #FBBF24;
+    --amber-100: #FEF3C7;
+    --amber-50:  #FFFBEB;
+    --green-600: #16A34A;
+    --green-500: #22C55E;
+    --green-100: #DCFCE7;
+    --orange-500: #EA580C;
+    --orange-100: #FFEDD5;
+    --red-600: #DC2626;
+    --red-100: #FEE2E2;
+    --purple-600: #7C3AED;
+    --purple-100: #EDE9FE;
+    --gray-900: #0F172A;
+    --gray-800: #1E293B;
+    --gray-700: #334155;
+    --gray-600: #475569;
+    --gray-500: #64748B;
+    --gray-400: #94A3B8;
+    --gray-300: #CBD5E1;
+    --gray-200: #E2E8F0;
+    --gray-100: #F1F5F9;
+    --gray-50:  #F8FAFC;
+    --white: #FFFFFF;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: white;
+    color: var(--gray-900);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  /* ── COVER PAGE ── */
+  .cover {
+    min-height: 100vh;
+    background: var(--navy-900);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px;
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+  }
+  .cover::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(37,99,235,.25) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 20%, rgba(245,158,11,.12) 0%, transparent 50%);
+  }
+  .cover-content { position: relative; z-index: 1; }
+  .cover-logo { display: inline-flex; align-items: center; gap: 14px; margin-bottom: 40px; }
+  .logo-mark {
+    width: 56px; height: 56px;
+    background: var(--amber-500);
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px;
+    box-shadow: 0 0 0 4px rgba(245,158,11,.2);
+  }
+  .logo-text { font-size: 38px; font-weight: 800; color: white; letter-spacing: -.5px; }
+  .logo-text span { color: var(--amber-400); }
+  .cover h1 { font-size: 48px; font-weight: 800; color: white; line-height: 1.1; margin-bottom: 16px; letter-spacing: -.5px; }
+  .cover h1 span { color: var(--amber-400); }
+  .cover p { font-size: 18px; color: var(--gray-400); max-width: 480px; margin: 0 auto 40px; }
+  .cover-meta { display: flex; gap: 40px; justify-content: center; margin-top: 40px; }
+  .cover-meta-item { text-align: left; }
+  .cover-meta-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--gray-500); margin-bottom: 4px; }
+  .cover-meta-value { font-size: 15px; font-weight: 700; color: white; }
+  .cover-meta-value span { color: var(--amber-400); }
+  .cover-version { position: absolute; bottom: 32px; right: 40px; font-size: 12px; color: var(--gray-600); }
+  .corrections-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(245,158,11,.15); border: 1px solid rgba(245,158,11,.3);
+    color: var(--amber-400); font-size: 11px; font-weight: 600;
+    padding: 5px 14px; border-radius: 9999px; margin-bottom: 20px;
+  }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    background: var(--navy-900);
+    color: white;
+    padding: 24px 40px;
+    margin-bottom: 0;
+    page-break-before: always;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+  .section-num { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--amber-400); margin-bottom: 6px; }
+  .section-title { font-size: 28px; font-weight: 800; }
+  .section-sub-text { font-size: 13px; color: var(--gray-400); }
+
+  /* ── CONTENT AREA ── */
+  .content { padding: 32px 40px; }
+
+  /* ── GROUP ── */
+  .group-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .1em; color: var(--gray-500);
+    margin-bottom: 12px; margin-top: 24px;
+    padding-bottom: 6px; border-bottom: 1px solid var(--gray-200);
+  }
+  .group-label:first-child { margin-top: 0; }
+
+  /* ── COLORS ── */
+  .color-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+  .color-swatch { border-radius: 8px; overflow: hidden; border: 1px solid var(--gray-100); }
+  .swatch-block { height: 56px; }
+  .swatch-info { padding: 8px; background: white; }
+  .swatch-name { font-size: 11px; font-weight: 700; color: var(--gray-700); }
+  .swatch-hex { font-size: 10px; color: var(--gray-400); font-family: monospace; }
+  .swatch-role { font-size: 10px; color: var(--gray-500); }
+
+  /* ── TYPOGRAPHY ── */
+  .type-row { display: grid; grid-template-columns: 120px 1fr 140px 160px; gap: 16px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--gray-100); }
+  .type-row:last-child { border-bottom: none; }
+  .type-token { font-size: 11px; font-family: monospace; color: var(--gray-500); background: var(--gray-50); padding: 3px 8px; border-radius: 4px; display: inline-block; }
+  .type-specs { font-size: 11px; color: var(--gray-400); }
+  .type-usage { font-size: 11px; color: var(--gray-500); }
+
+  /* ── SPACING ── */
+  .spacing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .spacing-card { border: 1px solid var(--gray-200); border-radius: 10px; padding: 16px; }
+  .spacing-card h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--gray-500); margin-bottom: 12px; }
+  .spacing-item { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 12px; color: var(--gray-500); }
+  .spacing-box { flex-shrink: 0; background: var(--navy-700); }
+
+  /* ── BUTTONS ── */
+  .btn-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 12px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    border: none; font-family: inherit; font-weight: 600;
+    border-radius: 10px; padding: 10px 18px; font-size: 13px; cursor: default;
+  }
+  .btn-lg { padding: 13px 24px; font-size: 15px; }
+  .btn-sm { padding: 7px 14px; font-size: 12px; }
+  .btn-primary { background: var(--amber-500); color: var(--gray-900); }
+  .btn-blue { background: var(--navy-600); color: white; }
+  .btn-outline { background: transparent; border: 1.5px solid var(--gray-300); color: var(--gray-700); }
+  .btn-ghost { background: transparent; color: var(--navy-600); }
+  .btn-danger { background: var(--red-100); color: var(--red-600); }
+  .btn-success { background: var(--green-100); color: var(--green-600); }
+
+  /* ── BADGES ── */
+  .badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 10px; border-radius: 9999px;
+    font-size: 11px; font-weight: 600;
+  }
+  .badge-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── CARDS ── */
+  .card { background: white; border-radius: 14px; border: 1px solid var(--gray-100); overflow: hidden; }
+  .card-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .card-img { height: 120px; display: flex; align-items: flex-end; padding: 10px; position: relative; overflow: hidden; }
+  .card-img-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.45) 0%, transparent 55%); }
+  .card-img-badges { position: relative; z-index: 1; display: flex; align-items: center; gap: 5px; }
+  .card-urgency { display: inline-flex; align-items: center; gap: 3px; background: #EF4444; color: white; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 9999px; }
+  .card-body { padding: 12px 14px 14px; }
+  .card-category { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--gray-400); margin-bottom: 4px; }
+  .card-name { font-size: 13px; font-weight: 700; color: var(--gray-900); margin-bottom: 3px; line-height: 1.3; }
+  .card-meta { font-size: 11px; color: var(--gray-500); margin-bottom: 10px; }
+  .card-price { font-size: 17px; font-weight: 800; color: var(--gray-900); }
+  .card-footer { display: flex; justify-content: space-between; align-items: center; }
+
+  .grad-1 { background: linear-gradient(135deg, #0c1b3f 0%, #1b3a6b 100%); }
+  .grad-2 { background: linear-gradient(135deg, #14532d 0%, #166534 100%); }
+  .grad-3 { background: linear-gradient(135deg, #4c1d95 0%, #6d28d9 100%); }
+  .grad-4 { background: linear-gradient(135deg, #78350f 0%, #d97706 100%); }
+
+  /* ── NAVBAR ── */
+  .navbar {
+    background: var(--navy-900);
+    padding: 0 24px;
+    height: 56px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-radius: 12px;
+    margin-bottom: 20px;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 9px; }
+  .nav-logo-mark {
+    width: 32px; height: 32px;
+    background: var(--amber-500); border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+    box-shadow: 0 0 0 3px rgba(245,158,11,.2);
+  }
+  .nav-logo-text { color: white; font-size: 17px; font-weight: 800; letter-spacing: -.3px; }
+  .nav-logo-text span { color: var(--amber-400); }
+  .nav-links { display: flex; gap: 4px; }
+  .nav-link { color: var(--gray-400); font-size: 13px; padding: 6px 12px; border-radius: 8px; }
+  .nav-link.active { color: white; background: rgba(255,255,255,.1); }
+  .nav-actions { display: flex; gap: 8px; align-items: center; }
+  .nav-login-btn { color: var(--gray-300); font-size: 13px; padding: 6px 12px; }
+  .nav-reg-btn { background: var(--amber-500); color: var(--gray-900); font-size: 12px; font-weight: 700; padding: 7px 14px; border-radius: 8px; }
+  .nav-publish-btn {
+    background: var(--amber-500); color: var(--gray-900);
+    font-size: 12px; font-weight: 700; padding: 8px 16px; border-radius: 8px;
+    display: flex; align-items: center; gap: 5px;
+    box-shadow: 0 0 0 3px rgba(245,158,11,.2);
+  }
+
+  /* ── FOOTER ── */
+  .footer { background: var(--navy-950); border-radius: 14px; padding: 32px; color: var(--gray-400); }
+  .footer-grid { display: grid; grid-template-columns: 1.8fr 1fr 1fr 1fr; gap: 24px; margin-bottom: 28px; }
+  .footer-brand p { font-size: 12px; line-height: 1.7; margin-top: 10px; color: var(--gray-500); }
+  .footer-col h4 { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--gray-300); margin-bottom: 12px; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .footer-col li { font-size: 12px; color: var(--gray-500); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,.06); padding-top: 20px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; }
+  .footer-legal { display: flex; gap: 16px; color: var(--gray-500); }
+  .escrow-badge { display: inline-flex; align-items: center; gap: 5px; background: rgba(245,158,11,.1); border: 1px solid rgba(245,158,11,.2); color: var(--amber-400); font-size: 10px; font-weight: 600; padding: 4px 10px; border-radius: 9999px; margin-top: 10px; }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--navy-900);
+    border-radius: 16px;
+    padding: 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(37,99,235,.2) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 20%, rgba(245,158,11,.1) 0%, transparent 50%);
+  }
+  .hero-content { position: relative; z-index: 1; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 5px; background: rgba(245,158,11,.15); border: 1px solid rgba(245,158,11,.3); color: var(--amber-400); font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 9999px; margin-bottom: 16px; }
+  .hero-title { font-size: 32px; font-weight: 800; color: white; line-height: 1.1; margin-bottom: 10px; }
+  .hero-title span { color: var(--amber-400); }
+  .hero-sub { font-size: 14px; color: var(--gray-400); max-width: 400px; margin: 0 auto 24px; }
+  .search-bar { background: white; border-radius: 12px; display: flex; max-width: 480px; margin: 0 auto; overflow: hidden; }
+  .search-input { flex: 1; padding: 13px 16px; font-size: 13px; font-family: inherit; border: none; color: var(--gray-900); }
+  .search-btn { background: var(--amber-500); color: var(--gray-900); font-weight: 700; font-size: 13px; padding: 13px 20px; white-space: nowrap; }
+  .hero-trust { display: flex; justify-content: center; gap: 24px; margin-top: 20px; }
+  .trust-item { display: flex; align-items: center; gap: 5px; color: var(--gray-400); font-size: 11px; }
+
+  /* Hero vendedor */
+  .hero-vendedor {
+    background: var(--navy-900);
+    border-radius: 16px;
+    padding: 28px 40px;
+    display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    position: relative; overflow: hidden; margin-bottom: 8px;
+  }
+  .hero-vendedor::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 80% 50%, rgba(245,158,11,.12) 0%, transparent 55%);
+  }
+  .hero-vendedor-content { position: relative; z-index: 1; }
+  .hero-vendedor-content h2 { font-size: 18px; font-weight: 800; color: white; margin-bottom: 6px; }
+  .hero-vendedor-content p { font-size: 12px; color: var(--gray-400); max-width: 360px; }
+  .hero-vendedor-cta {
+    position: relative; z-index: 1;
+    background: var(--amber-500); color: var(--gray-900);
+    font-size: 14px; font-weight: 800; padding: 14px 28px;
+    border-radius: 12px; white-space: nowrap;
+    display: flex; align-items: center; gap: 7px;
+    box-shadow: 0 0 0 4px rgba(245,158,11,.25), 0 4px 14px rgba(245,158,11,.35);
+    flex-shrink: 0;
+  }
+
+  /* ── FILTROS ── */
+  .filtros { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .chip { background: white; border: 1.5px solid var(--gray-200); color: var(--gray-700); font-size: 12px; font-weight: 500; padding: 6px 14px; border-radius: 9999px; }
+  .chip.active { background: var(--navy-700); border-color: var(--navy-700); color: white; }
+
+  /* ── DETAIL PAGE ── */
+  .detail-layout { display: grid; grid-template-columns: 1fr 310px; gap: 20px; }
+  .detail-hero { height: 220px; border-radius: 16px; display: flex; align-items: flex-end; padding: 20px; position: relative; overflow: hidden; }
+  .detail-hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.75) 0%, transparent 55%); }
+  .detail-hero-content { z-index: 1; position: relative; }
+  .detail-event-title { font-size: 20px; font-weight: 800; color: white; line-height: 1.2; }
+  .event-meta-pill { display: inline-flex; align-items: center; gap: 4px; background: rgba(255,255,255,.15); color: white; font-size: 11px; padding: 4px 10px; border-radius: 9999px; margin-right: 5px; margin-top: 8px; }
+  .detail-info { background: white; border-radius: 12px; padding: 16px; border: 1px solid var(--gray-100); margin-top: 12px; }
+  .detail-info h3 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--gray-500); margin-bottom: 10px; }
+  .detail-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--gray-100); }
+  .detail-row:last-child { border-bottom: none; }
+  .detail-label { font-size: 12px; color: var(--gray-500); }
+  .detail-value { font-size: 12px; font-weight: 600; color: var(--gray-900); }
+  .buy-card { background: white; border-radius: 16px; padding: 20px; border: 1px solid var(--gray-100); box-shadow: 0 6px 24px rgba(0,0,0,.09); }
+  .buy-card-title { font-size: 11px; font-weight: 700; color: var(--gray-400); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 16px; }
+  .price-breakdown { background: var(--gray-50); border-radius: 10px; padding: 14px; margin-bottom: 16px; }
+  .price-row { display: flex; justify-content: space-between; font-size: 12px; padding: 4px 0; }
+  .price-row-total { display: flex; justify-content: space-between; padding-top: 10px; margin-top: 8px; border-top: 1.5px solid var(--gray-200); font-size: 16px; font-weight: 800; }
+  .trust-badge-row { display: flex; gap: 8px; margin-top: 14px; }
+  .trust-badge-item { flex: 1; background: var(--gray-50); border-radius: 8px; padding: 8px; text-align: center; font-size: 10px; color: var(--gray-600); }
+
+  /* ── REPUTACIÓN DE VENDEDOR ── */
+  .seller-mini { display: flex; align-items: center; gap: 10px; padding: 12px 0; border-top: 1px solid var(--gray-100); margin-top: 12px; }
+  .seller-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--navy-700); color: white; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+  .seller-info { flex: 1; min-width: 0; }
+  .seller-name { font-size: 12px; font-weight: 700; color: var(--gray-900); }
+  .seller-rep { display: inline-flex; align-items: center; gap: 3px; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 9999px; margin-top: 2px; }
+  .rep-top { background: #FEF3C7; color: #92400E; }
+  .rep-trusted { background: #DCFCE7; color: #166534; }
+  .rep-verified { background: #DBEAFE; color: #1E4799; }
+  .seller-sales { font-size: 11px; color: var(--gray-400); }
+
+  /* ── SCARCITY BANNER ── */
+  .scarcity-banner { background: #FFFBEB; border: 1px solid #FEF3C7; border-radius: 10px; padding: 10px 14px; margin-top: 12px; font-size: 12px; color: #92400E; font-weight: 600; }
+
+  /* ── OPERATION CARDS ── */
+  .op-card { background: white; border-radius: 12px; border: 1px solid var(--gray-100); padding: 14px 18px; display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+  .op-thumb { width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .op-info { flex: 1; min-width: 0; }
+  .op-name { font-size: 13px; font-weight: 700; color: var(--gray-900); }
+  .op-meta { font-size: 11px; color: var(--gray-400); margin-top: 2px; }
+  .op-right { text-align: right; flex-shrink: 0; }
+  .op-amount { font-size: 15px; font-weight: 800; color: var(--gray-900); }
+  .op-date { font-size: 10px; color: var(--gray-400); margin-top: 3px; }
+
+  /* ── TIMELINE ── */
+  .timeline { position: relative; padding-left: 20px; }
+  .timeline::before { content: ''; position: absolute; left: 6px; top: 6px; bottom: 6px; width: 2px; background: var(--gray-200); }
+  .timeline-item { position: relative; margin-bottom: 16px; }
+  .timeline-dot { position: absolute; left: -20px; top: 2px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; }
+  .dot-done { background: var(--green-500); }
+  .dot-current { background: var(--amber-500); box-shadow: 0 0 0 4px rgba(245,158,11,.2); }
+  .dot-pending { background: var(--gray-300); }
+  .timeline-label { font-size: 12px; font-weight: 600; color: var(--gray-900); }
+  .timeline-sub { font-size: 10px; color: var(--gray-400); }
+
+  /* ── VENTA CARDS ── */
+  .venta-card { background: white; border-radius: 12px; border: 1px solid var(--gray-100); overflow: hidden; margin-bottom: 12px; }
+  .venta-header { background: var(--gray-50); border-bottom: 1px solid var(--gray-100); padding: 10px 18px; display: flex; justify-content: space-between; align-items: center; }
+  .venta-body { padding: 14px 18px; display: flex; align-items: center; gap: 14px; }
+  .venta-timer { background: var(--amber-50); border: 1px solid var(--amber-100); border-radius: 8px; padding: 6px 12px; font-size: 12px; color: #92400E; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
+  .venta-timer.urgent { background: #FEE2E2; border-color: #FECACA; color: #991B1B; }
+  .venta-actions { padding: 0 18px 14px; display: flex; gap: 8px; }
+
+  /* ── STATS ── */
+  .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+  .stat-card { background: white; border-radius: 12px; border: 1px solid var(--gray-100); padding: 16px; }
+  .stat-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--gray-500); margin-bottom: 6px; }
+  .stat-value { font-size: 24px; font-weight: 800; color: var(--gray-900); }
+  .stat-sub { font-size: 11px; color: var(--gray-400); margin-top: 2px; }
+
+  /* ── HOW IT WORKS ── */
+  .how-grid { display: flex; flex-direction: column; gap: 12px; }
+  .how-item { display: flex; gap: 12px; align-items: flex-start; }
+  .how-num { width: 26px; height: 26px; border-radius: 50%; background: var(--navy-100); color: var(--navy-600); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .how-title { font-size: 12px; font-weight: 600; }
+  .how-sub { font-size: 11px; color: var(--gray-500); margin-top: 2px; }
+
+  /* ── PRINCIPLES ── */
+  .principles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .principle-card { background: white; border-radius: 12px; border: 1px solid var(--gray-100); padding: 16px; text-align: center; }
+  .principle-icon { font-size: 24px; margin-bottom: 8px; }
+  .principle-title { font-size: 12px; font-weight: 700; color: var(--gray-900); margin-bottom: 4px; }
+  .principle-desc { font-size: 11px; color: var(--gray-500); }
+
+  /* ── CORRECTION CALLOUT ── */
+  .correction-callout {
+    background: #F0FDF4; border: 1px solid #BBF7D0;
+    border-radius: 10px; padding: 12px 16px; margin-bottom: 14px;
+    font-size: 11px; color: #166534; display: flex; gap: 8px; align-items: flex-start;
+  }
+  .correction-callout strong { font-weight: 700; display: block; margin-bottom: 2px; }
+
+  /* ── PRINT ── */
+  @media print {
+    .cover { min-height: 100vh; }
+    .section-header { page-break-before: always; }
+    .no-break { page-break-inside: avoid; }
+    @page { size: A4; margin: 0; }
+  }
+
+  /* ── UTILS ── */
+  .divider { height: 1px; background: var(--gray-200); margin: 20px 0; }
+  .label-tag { font-size: 10px; font-family: monospace; color: var(--gray-500); background: var(--gray-50); padding: 2px 7px; border-radius: 4px; margin-right: 6px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .no-break { page-break-inside: avoid; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════
+     PORTADA
+══════════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-content">
+    <div class="cover-logo">
+      <div class="logo-mark">🎟</div>
+      <div class="logo-text">Trans<span>fiero</span></div>
+    </div>
+    <div class="corrections-pill">✦ v1.1 — 5 correcciones de diseño incorporadas</div>
+    <h1>Sistema de<br><span>Diseño Visual</span></h1>
+    <p>Identidad visual, paleta de colores, tipografía, componentes y mockups de pantallas para la plataforma de transferencia segura de entradas.</p>
+    <div style="height:1px;background:rgba(255,255,255,.1);margin:28px 0"></div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;max-width:560px;margin:0 auto;text-align:left">
+      <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:10px;padding:12px">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--amber-400);margin-bottom:4px">01</div>
+        <div style="font-size:11px;color:white;font-weight:600">Reputación vendedor</div>
+      </div>
+      <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:10px;padding:12px">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--amber-400);margin-bottom:4px">02</div>
+        <div style="font-size:11px;color:white;font-weight:600">Presencia de marca</div>
+      </div>
+      <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:10px;padding:12px">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--amber-400);margin-bottom:4px">03</div>
+        <div style="font-size:11px;color:white;font-weight:600">Escasez y urgencia</div>
+      </div>
+      <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:10px;padding:12px">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--amber-400);margin-bottom:4px">04</div>
+        <div style="font-size:11px;color:white;font-weight:600">Imagen en cards</div>
+      </div>
+      <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:10px;padding:12px">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--amber-400);margin-bottom:4px">05</div>
+        <div style="font-size:11px;color:white;font-weight:600">CTA dominante</div>
+      </div>
+    </div>
+    <div class="cover-meta" style="margin-top:32px">
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Versión</div>
+        <div class="cover-meta-value"><span>V1.1</span></div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Fecha</div>
+        <div class="cover-meta-value">Junio 2026</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Stack</div>
+        <div class="cover-meta-value">Next.js 15 · Tailwind</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Módulo</div>
+        <div class="cover-meta-value">M5 Marketplace</div>
+      </div>
+    </div>
+  </div>
+  <div class="cover-version">Transfiero © 2026 — Documento interno</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     1. SISTEMA DE DISEÑO
+══════════════════════════════════════════════════════ -->
+<div class="section-header">
+  <div>
+    <div class="section-num">Sección 01</div>
+    <div class="section-title">Sistema de Diseño</div>
+  </div>
+  <div class="section-sub-text">Paleta de colores · Tipografía · Espaciado · Principios</div>
+</div>
+
+<div class="content">
+
+  <div class="principles no-break">
+    <div class="principle-card">
+      <div class="principle-icon">🔒</div>
+      <div class="principle-title">Confianza</div>
+      <div class="principle-desc">El diseño transmite seguridad y credibilidad en cada interacción</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-icon">⚡</div>
+      <div class="principle-title">Urgencia legítima</div>
+      <div class="principle-desc">Badges de días y contadores reales de 15 min para el vendedor</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-icon">🇵🇪</div>
+      <div class="principle-title">Peruanidad</div>
+      <div class="principle-desc">Tonos cálidos del ámbar reflejan energía y calidez local</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-icon">⭐</div>
+      <div class="principle-title">Reputación visible</div>
+      <div class="principle-desc">Los niveles del vendedor se muestran siempre en la buy card</div>
+    </div>
+  </div>
+
+  <div class="group-label" style="margin-top:24px">Paleta de colores</div>
+  <div class="color-grid no-break">
+    <div class="color-swatch"><div class="swatch-block" style="background:#050E24"></div><div class="swatch-info"><div class="swatch-name">Navy 950</div><div class="swatch-hex">#050E24</div><div class="swatch-role">Footer</div></div></div>
+    <div class="color-swatch"><div class="swatch-block" style="background:#0C1B3F"></div><div class="swatch-info"><div class="swatch-name">Navy 900</div><div class="swatch-hex">#0C1B3F</div><div class="swatch-role">Navbar · Hero</div></div></div>
+    <div class="color-swatch"><div class="swatch-block" style="background:#1B3A6B"></div><div class="swatch-info"><div class="swatch-name">Navy 700</div><div class="swatch-hex">#1B3A6B</div><div class="swatch-role">Brand primario</div></div></div>
+    <div class="color-swatch"><div class="swatch-block" style="background:#1E4799"></div><div class="swatch-info"><div class="swatch-name">Navy 600</div><div class="swatch-hex">#1E4799</div><div class="swatch-role">Botones blue</div></div></div>
+    <div class="color-swatch"><div class="swatch-block" style="background:#2563EB"></div><div class="swatch-info"><div class="swatch-name">Blue 500</div><div class="swatch-hex">#2563EB</div><div class="swatch-role">Links · Activo</div></div></div>
+    <div class="color-swatch"><div class="swatch-block" style="background:#DBEAFE"></div><div class="swatch-info"><div class="swatch-name">Blue 100</div><div class="swatch-hex">#DBEAFE</div><div class="swatch-role">Badge verificado</div></div></div>
+    <div class="color-swatch"><div class="swatch-block" style="background:#F59E0B"></div><div class="swatch-info"><div class="swatch-name">Amber 500</div><div class="swatch-hex">#F59E0B</div><div class="swatch-role">CTA principal · Logo</div></div></div>
+    <div class="color-swatch"><div class="swatch-block" style="background:#FBBF24"></div><div class="swatch-info"><div class="swatch-name">Amber 400</div><div class="swatch-hex">#FBBF24</div><div class="swatch-role">Logo accent</div></div></div>
+    <div class="color-swatch"><div class="swatch-block" style="background:#FEF3C7"></div><div class="swatch-info"><div class="swatch-name">Amber 100</div><div class="swatch-hex">#FEF3C7</div><div class="swatch-role">Badge Top vendedor</div></div></div>
+    <div class="color-swatch"><div class="swatch-block" style="background:#16A34A"></div><div class="swatch-info"><div class="swatch-name">Green 600</div><div class="swatch-hex">#16A34A</div><div class="swatch-role">Disponible · Éxito</div></div></div>
+    <div class="color-swatch"><div class="swatch-block" style="background:#DCFCE7"></div><div class="swatch-info"><div class="swatch-name">Green 100</div><div class="swatch-hex">#DCFCE7</div><div class="swatch-role">Badge confiable</div></div></div>
+    <div class="color-swatch"><div class="swatch-block" style="background:#EA580C"></div><div class="swatch-info"><div class="swatch-name">Orange 500</div><div class="swatch-hex">#EA580C</div><div class="swatch-role">Reservada</div></div></div>
+    <div class="color-swatch"><div class="swatch-block" style="background:#EF4444"></div><div class="swatch-info"><div class="swatch-name">Red 500</div><div class="swatch-hex">#EF4444</div><div class="swatch-role">Badge urgencia ≤7d</div></div></div>
+    <div class="color-swatch"><div class="swatch-block" style="background:#DC2626"></div><div class="swatch-info"><div class="swatch-name">Red 600</div><div class="swatch-hex">#DC2626</div><div class="swatch-role">Error · Cancelada</div></div></div>
+    <div class="color-swatch"><div class="swatch-block" style="background:#7C3AED"></div><div class="swatch-info"><div class="swatch-name">Purple 600</div><div class="swatch-hex">#7C3AED</div><div class="swatch-role">Disputa</div></div></div>
+    <div class="color-swatch"><div class="swatch-block" style="background:#F1F5F9"></div><div class="swatch-info"><div class="swatch-name">Gray 100</div><div class="swatch-hex">#F1F5F9</div><div class="swatch-role">Background page</div></div></div>
+    <div class="color-swatch"><div class="swatch-block" style="background:#64748B"></div><div class="swatch-info"><div class="swatch-name">Gray 500</div><div class="swatch-hex">#64748B</div><div class="swatch-role">Texto secundario</div></div></div>
+    <div class="color-swatch"><div class="swatch-block" style="background:#0F172A"></div><div class="swatch-info"><div class="swatch-name">Gray 900</div><div class="swatch-hex">#0F172A</div><div class="swatch-role">Texto principal</div></div></div>
+  </div>
+
+  <div class="group-label" style="margin-top:24px">Tipografía — Inter</div>
+  <div class="card no-break" style="padding:0;overflow:hidden">
+    <div style="padding:16px 16px 0;border-bottom:1px solid var(--gray-100)">
+      <div style="display:grid;grid-template-columns:100px 1fr 130px 150px;gap:12px;padding-bottom:8px">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--gray-400)">Token</div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--gray-400)">Muestra</div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--gray-400)">Specs</div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--gray-400)">Uso</div>
+      </div>
+    </div>
+    <div style="padding:0 16px">
+      <div class="type-row"><span class="type-token">display</span><span style="font-size:28px;font-weight:800;letter-spacing:-.5px">Transfiero</span><span class="type-specs">36px · 800 · -0.5px</span><span class="type-usage">Hero principal</span></div>
+      <div class="type-row"><span class="type-token">h1</span><span style="font-size:22px;font-weight:800">Marketplace</span><span class="type-specs">28px · 800</span><span class="type-usage">Títulos de página</span></div>
+      <div class="type-row"><span class="type-token">h2</span><span style="font-size:17px;font-weight:700">Bad Bunny Tour 2026</span><span class="type-specs">22px · 700</span><span class="type-usage">Nombre de evento</span></div>
+      <div class="type-row"><span class="type-token">body-lg</span><span style="font-size:14px">Estadio Nacional · Lima</span><span class="type-specs">16px · 400</span><span class="type-usage">Descripción, meta</span></div>
+      <div class="type-row"><span class="type-token">body-sm</span><span style="font-size:13px">Zona Platea Norte · Asiento F12</span><span class="type-specs">14px · 400</span><span class="type-usage">Detalles de tarjeta</span></div>
+      <div class="type-row"><span class="type-token">price</span><span style="font-size:20px;font-weight:800;color:#1B3A6B;letter-spacing:-.3px">S/ 235.40</span><span class="type-specs">24px · 800 · tabular</span><span class="type-usage">Precios y montos</span></div>
+      <div class="type-row"><span class="type-token">caption</span><span style="font-size:10px;color:var(--gray-400);text-transform:uppercase;letter-spacing:.06em">Sáb 14 Jun · 8:00 PM</span><span class="type-specs">11px · 600 · caps</span><span class="type-usage">Fechas, etiquetas</span></div>
+    </div>
+  </div>
+
+  <div class="group-label" style="margin-top:24px">Espaciado y bordes</div>
+  <div class="spacing-grid no-break">
+    <div class="spacing-card">
+      <h4>Radios de borde</h4>
+      <div class="spacing-item"><div class="spacing-box" style="width:22px;height:22px;border-radius:6px"></div>sm — 6px · inputs, tags</div>
+      <div class="spacing-item"><div class="spacing-box" style="width:22px;height:22px;border-radius:10px"></div>md — 10px · botones</div>
+      <div class="spacing-item"><div class="spacing-box" style="width:22px;height:22px;border-radius:14px"></div>lg — 14px · cards</div>
+      <div class="spacing-item"><div class="spacing-box" style="width:22px;height:22px;border-radius:20px"></div>xl — 20px · hero, modales</div>
+      <div class="spacing-item"><div class="spacing-box" style="width:22px;height:22px;border-radius:9999px"></div>full — chips, badges, pills</div>
+    </div>
+    <div class="spacing-card">
+      <h4>Sombras</h4>
+      <div style="display:flex;flex-direction:column;gap:12px;padding:4px">
+        <div style="background:white;border-radius:8px;padding:10px;box-shadow:0 1px 3px rgba(0,0,0,.07);font-size:11px;color:var(--gray-500);text-align:center;border:1px solid var(--gray-100)">shadow-sm · nav, filtros</div>
+        <div style="background:white;border-radius:8px;padding:10px;box-shadow:0 4px 12px rgba(0,0,0,.08);font-size:11px;color:var(--gray-500);text-align:center">shadow-md · cards del marketplace</div>
+        <div style="background:white;border-radius:8px;padding:10px;box-shadow:0 6px 24px rgba(0,0,0,.10);font-size:11px;color:var(--gray-500);text-align:center">shadow-lg · buy card sticky</div>
+      </div>
+    </div>
+    <div class="spacing-card">
+      <h4>Grilla y layout</h4>
+      <div style="font-size:12px;color:var(--gray-600);display:flex;flex-direction:column;gap:7px">
+        <div style="display:flex;justify-content:space-between"><span>Columnas</span><span style="font-weight:600">12</span></div>
+        <div style="display:flex;justify-content:space-between"><span>Max-width</span><span style="font-weight:600">1280px</span></div>
+        <div style="display:flex;justify-content:space-between"><span>Padding lateral</span><span style="font-weight:600">16–40px</span></div>
+        <div style="height:1px;background:var(--gray-100);margin:4px 0"></div>
+        <div style="font-weight:600">Marketplace grid</div>
+        <div style="display:flex;justify-content:space-between"><span>Mobile</span><span style="font-weight:600">1 columna</span></div>
+        <div style="display:flex;justify-content:space-between"><span>Tablet</span><span style="font-weight:600">2 columnas</span></div>
+        <div style="display:flex;justify-content:space-between"><span>Desktop</span><span style="font-weight:600">3–4 columnas</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     2. COMPONENTES
+══════════════════════════════════════════════════════ -->
+<div class="section-header">
+  <div>
+    <div class="section-num">Sección 02</div>
+    <div class="section-title">Componentes Base</div>
+  </div>
+  <div class="section-sub-text">Botones · Badges · Cards con urgencia · Reputación vendedor</div>
+</div>
+
+<div class="content">
+
+  <div class="group-label">Botones</div>
+  <div class="card" style="padding:20px" class="no-break">
+    <div class="btn-row">
+      <button class="btn btn-primary btn-lg">🎟 Reservar entrada</button>
+      <button class="btn btn-blue">Publicar entrada</button>
+      <button class="btn btn-outline">Ver más</button>
+      <button class="btn btn-ghost">Cancelar</button>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-success">✓ Aceptar reserva</button>
+      <button class="btn btn-danger">✕ Rechazar</button>
+      <button class="btn btn-primary btn-sm" style="opacity:.4">Reservada</button>
+    </div>
+    <div class="divider" style="margin:14px 0 10px"></div>
+    <div style="font-size:11px;color:var(--gray-400)">
+      <strong>Regla:</strong> CTA principal = Amber · Acciones de sistema = Navy blue · Acciones destructivas = texto rojo sobre fondo rojo claro · Disabled = opacity 0.4
+    </div>
+  </div>
+
+  <div class="group-label" style="margin-top:20px">Badges de estado</div>
+  <div class="card" style="padding:20px" class="no-break">
+    <div style="font-size:11px;font-weight:600;color:var(--gray-500);margin-bottom:8px">Estados de Publicación</div>
+    <div class="badge-row">
+      <span class="badge" style="background:#DCFCE7;color:#16A34A"><span class="badge-dot" style="background:#16A34A"></span>DISPONIBLE</span>
+      <span class="badge" style="background:#FFEDD5;color:#EA580C"><span class="badge-dot" style="background:#EA580C"></span>RESERVADA</span>
+      <span class="badge" style="background:#FEF3C7;color:#B45309"><span class="badge-dot" style="background:#B45309"></span>PENDIENTE_VENDEDOR</span>
+      <span class="badge" style="background:#FEF9C3;color:#A16207"><span class="badge-dot" style="background:#A16207"></span>PENDIENTE_REVISION</span>
+      <span class="badge" style="background:#FEE2E2;color:#DC2626"><span class="badge-dot" style="background:#DC2626"></span>CANCELADA</span>
+      <span class="badge" style="background:#F8FAFC;color:#64748B"><span class="badge-dot" style="background:#94A3B8"></span>BORRADOR</span>
+    </div>
+    <div style="font-size:11px;font-weight:600;color:var(--gray-500);margin:12px 0 8px">Estados de Operación</div>
+    <div class="badge-row">
+      <span class="badge" style="background:#FEF9C3;color:#A16207"><span class="badge-dot" style="background:#A16207"></span>ESPERANDO_VENDEDOR</span>
+      <span class="badge" style="background:#FEF3C7;color:#B45309"><span class="badge-dot" style="background:#B45309"></span>PAGO_PENDIENTE</span>
+      <span class="badge" style="background:#DBEAFE;color:#1E4799"><span class="badge-dot" style="background:#1E4799"></span>PAGO_RECIBIDO</span>
+      <span class="badge" style="background:#EDE9FE;color:#7C3AED"><span class="badge-dot" style="background:#7C3AED"></span>EN_TRANSFERENCIA</span>
+      <span class="badge" style="background:#DCFCE7;color:#16A34A"><span class="badge-dot" style="background:#16A34A"></span>FONDOS_LIBERADOS</span>
+      <span class="badge" style="background:#FEE2E2;color:#DC2626"><span class="badge-dot" style="background:#DC2626"></span>CANCELADA</span>
+      <span class="badge" style="background:#DBEAFE;color:#1E4799"><span class="badge-dot" style="background:#1E4799"></span>REEMBOLSADA</span>
+      <span class="badge" style="background:#EDE9FE;color:#7C3AED"><span class="badge-dot" style="background:#7C3AED"></span>EN_DISPUTA</span>
+    </div>
+  </div>
+
+  <!-- CORRECCIÓN 01: REPUTACIÓN DE VENDEDOR -->
+  <div class="correction-callout" style="margin-top:20px">
+    <div>✦</div>
+    <div><strong>Corrección 01 — Reputación de vendedor</strong>
+    Tres niveles según ventasCompletadas: ≥20 = Top vendedor (ámbar), ≥5 = Vendedor confiable (verde), &lt;5 = Vendedor verificado (azul). Se muestra siempre en la buy card del detalle de entrada.</div>
+  </div>
+  <div class="card" style="padding:20px" class="no-break">
+    <div style="font-size:11px;font-weight:600;color:var(--gray-500);margin-bottom:12px">Niveles de reputación del vendedor</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div class="seller-mini" style="border-top:none;padding-top:0">
+        <div class="seller-avatar" style="background:#1B3A6B">MV</div>
+        <div class="seller-info">
+          <div class="seller-name">María Villanueva</div>
+          <div><span class="seller-rep rep-top">⭐ Top vendedor</span></div>
+        </div>
+        <div class="seller-sales">28 ventas completadas</div>
+      </div>
+      <div class="divider" style="margin:2px 0"></div>
+      <div class="seller-mini" style="border-top:none;padding-top:0">
+        <div class="seller-avatar" style="background:#166534">CR</div>
+        <div class="seller-info">
+          <div class="seller-name">Carlos Ríos</div>
+          <div><span class="seller-rep rep-trusted">✓ Vendedor confiable</span></div>
+        </div>
+        <div class="seller-sales">8 ventas completadas</div>
+      </div>
+      <div class="divider" style="margin:2px 0"></div>
+      <div class="seller-mini" style="border-top:none;padding-top:0">
+        <div class="seller-avatar" style="background:#1E4799">JL</div>
+        <div class="seller-info">
+          <div class="seller-name">Juan López</div>
+          <div><span class="seller-rep rep-verified">✓ Vendedor verificado</span></div>
+        </div>
+        <div class="seller-sales">2 ventas completadas</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CORRECCIÓN 03: URGENCIA/ESCASEZ -->
+  <div class="correction-callout" style="margin-top:20px">
+    <div>✦</div>
+    <div><strong>Corrección 03 — Escasez y urgencia</strong>
+    Badge rojo "⚡ X días" cuando quedan ≤7 días para el evento. Scarcity banner "👀 Varias personas están viendo" en el detalle. Timer de 15 min para el vendedor con color rojo urgente al bajar de 5 min.</div>
+  </div>
+  <div class="card" style="padding:20px" class="no-break">
+    <div style="font-size:11px;font-weight:600;color:var(--gray-500);margin-bottom:12px">Badges de urgencia</div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+      <span class="card-urgency">⚡ 3 días</span>
+      <span class="card-urgency">⚡ ¡Mañana!</span>
+      <span class="card-urgency">⚡ ¡Hoy!</span>
+      <span style="font-size:11px;color:var(--gray-400)">← aparecen en la card del marketplace</span>
+    </div>
+    <div class="divider"></div>
+    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+      <div class="venta-timer">⏱ 08:23 restantes</div>
+      <div class="venta-timer urgent">⏱ 02:47 restantes</div>
+      <span style="font-size:11px;color:var(--gray-400)">← timer del vendedor, rojo al bajar de 5 min</span>
+    </div>
+    <div class="scarcity-banner" style="margin-top:12px">👀 Varias personas están viendo esta entrada ahora</div>
+  </div>
+
+  <!-- CORRECCIÓN 04: CARDS CON IMAGEN -->
+  <div class="correction-callout" style="margin-top:20px">
+    <div>✦</div>
+    <div><strong>Corrección 04 — Imagen del evento en cards</strong>
+    Las cards muestran la portada del evento cuando existe (imagenPortadaUrl). Si no hay imagen, se muestra el gradiente de la categoría con el icono. Overlay con gradiente negro inferior para legibilidad de badges.</div>
+  </div>
+  <div class="card-grid no-break">
+    <!-- Card con foto simulada -->
+    <div class="card">
+      <div class="card-img grad-1" style="position:relative">
+        <div class="card-img-overlay"></div>
+        <div class="card-img-badges">
+          <span class="badge" style="background:rgba(22,163,74,.9);color:white"><span class="badge-dot" style="background:white"></span>Disponible</span>
+          <span class="card-urgency">⚡ 3 días</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-category">🎵 Concierto</div>
+        <div class="card-name">Bad Bunny — Most Wanted Tour</div>
+        <div class="card-meta">📅 22 Jun · 📍 Estadio Nacional</div>
+        <div class="card-footer">
+          <div><div style="font-size:10px;color:var(--gray-400)">Precio entrada</div><div class="card-price">S/ 220.00</div></div>
+          <button class="btn btn-primary btn-sm">Reservar</button>
+        </div>
+      </div>
+    </div>
+    <!-- Card con gradiente -->
+    <div class="card">
+      <div class="card-img grad-2" style="position:relative">
+        <div class="card-img-overlay"></div>
+        <div class="card-img-badges">
+          <span class="badge" style="background:rgba(22,163,74,.9);color:white"><span class="badge-dot" style="background:white"></span>Disponible</span>
+        </div>
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:36px;opacity:.25">⚽</div>
+      </div>
+      <div class="card-body">
+        <div class="card-category">⚽ Deporte</div>
+        <div class="card-name">Alianza vs. Universitario</div>
+        <div class="card-meta">📅 30 Jun · 📍 Estadio Monumental</div>
+        <div class="card-footer">
+          <div><div style="font-size:10px;color:var(--gray-400)">Precio entrada</div><div class="card-price">S/ 180.00</div></div>
+          <button class="btn btn-primary btn-sm">Reservar</button>
+        </div>
+      </div>
+    </div>
+    <!-- Card reservada -->
+    <div class="card">
+      <div class="card-img grad-3" style="position:relative">
+        <div class="card-img-overlay"></div>
+        <div class="card-img-badges">
+          <span class="badge" style="background:rgba(234,88,12,.9);color:white"><span class="badge-dot" style="background:white"></span>Reservada</span>
+        </div>
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:36px;opacity:.25">🎪</div>
+      </div>
+      <div class="card-body">
+        <div class="card-category">🎪 Festival</div>
+        <div class="card-name">Tomorrowland Lima 2026</div>
+        <div class="card-meta">📅 5 Jul · 📍 La Molina</div>
+        <div class="card-footer">
+          <div><div style="font-size:10px;color:var(--gray-400)">Precio entrada</div><div class="card-price">S/ 350.00</div></div>
+          <button class="btn btn-outline btn-sm" style="opacity:.5">Reservada</button>
+        </div>
+      </div>
+    </div>
+    <!-- Card urgente con foto -->
+    <div class="card">
+      <div class="card-img grad-4" style="position:relative">
+        <div class="card-img-overlay"></div>
+        <div class="card-img-badges">
+          <span class="badge" style="background:rgba(22,163,74,.9);color:white"><span class="badge-dot" style="background:white"></span>Disponible</span>
+          <span class="card-urgency">⚡ ¡Mañana!</span>
+        </div>
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:36px;opacity:.25">🎭</div>
+      </div>
+      <div class="card-body">
+        <div class="card-category">🎭 Teatro</div>
+        <div class="card-name">Canto Lirico — Última función</div>
+        <div class="card-meta">📅 20 Jun · 📍 Teatro Municipal</div>
+        <div class="card-footer">
+          <div><div style="font-size:10px;color:var(--gray-400)">Precio entrada</div><div class="card-price">S/ 95.00</div></div>
+          <button class="btn btn-primary btn-sm">Reservar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="group-label" style="margin-top:20px">Inputs y formularios</div>
+  <div class="card" style="padding:20px" class="no-break">
+    <div class="grid-2">
+      <div>
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:11px;font-weight:600;color:var(--gray-700);margin-bottom:4px">Nombre del evento <span style="color:#DC2626">*</span></label>
+          <div style="padding:9px 12px;border:1.5px solid var(--gray-300);border-radius:8px;font-size:13px;color:var(--gray-900)">Bad Bunny Tour 2026</div>
+        </div>
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:11px;font-weight:600;color:var(--gray-700);margin-bottom:4px">Precio de venta (S/) <span style="color:#DC2626">*</span></label>
+          <div style="padding:9px 12px;border:1.5px solid var(--gray-300);border-radius:8px;font-size:13px;color:var(--gray-900)">220.00</div>
+          <div style="font-size:10px;color:var(--gray-500);margin-top:3px">Máximo permitido: S/ 242.00 (110% del precio original)</div>
+        </div>
+        <div>
+          <label style="display:block;font-size:11px;font-weight:600;color:#DC2626;margin-bottom:4px">Categoría <span style="font-weight:400;color:var(--gray-400)">(campo con error)</span></label>
+          <div style="padding:9px 12px;border:1.5px solid #DC2626;border-radius:8px;font-size:13px;color:var(--gray-400)">Selecciona una categoría</div>
+          <div style="font-size:10px;color:#DC2626;margin-top:3px">Debes seleccionar una categoría</div>
+        </div>
+      </div>
+      <div>
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:11px;font-weight:600;color:var(--gray-700);margin-bottom:4px">Fecha del evento <span style="color:#DC2626">*</span></label>
+          <div style="padding:9px 12px;border:1.5px solid #1E4799;border-radius:8px;font-size:13px;color:var(--gray-900)">22/06/2026 20:00</div>
+          <div style="font-size:10px;color:#1E4799;margin-top:3px">Campo activo (focus)</div>
+        </div>
+        <div>
+          <label style="display:block;font-size:11px;font-weight:600;color:var(--gray-700);margin-bottom:4px">Descripción</label>
+          <div style="padding:9px 12px;border:1.5px solid var(--gray-300);border-radius:8px;font-size:13px;color:var(--gray-900);height:72px">Entrada zona platea norte, asiento F12. Comprada en Teleticket.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="group-label" style="margin-top:20px">Indicadores de confianza</div>
+  <div class="grid-3 no-break">
+    <div class="card" style="padding:16px;text-align:center">
+      <div style="font-size:24px;margin-bottom:8px">🔒</div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:4px">Pago en custodia</div>
+      <div style="font-size:11px;color:var(--gray-500)">Tu dinero está seguro hasta confirmar la entrada</div>
+    </div>
+    <div class="card" style="padding:16px;text-align:center">
+      <div style="font-size:24px;margin-bottom:8px">✅</div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:4px">Vendedores verificados</div>
+      <div style="font-size:11px;color:var(--gray-500)">Todos los vendedores tienen DNI verificado</div>
+    </div>
+    <div class="card" style="padding:16px;text-align:center">
+      <div style="font-size:24px;margin-bottom:8px">⚡</div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:4px">Soporte activo</div>
+      <div style="font-size:11px;color:var(--gray-500)">Equipo disponible para resolver disputas</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     3. NAVBAR & FOOTER
+══════════════════════════════════════════════════════ -->
+<div class="section-header">
+  <div>
+    <div class="section-num">Sección 03</div>
+    <div class="section-title">Navbar & Footer</div>
+  </div>
+  <div class="section-sub-text">Layout principal — 3 estados de auth · Presencia de marca reforzada</div>
+</div>
+
+<div class="content">
+
+  <!-- CORRECCIÓN 02 -->
+  <div class="correction-callout">
+    <div>✦</div>
+    <div><strong>Corrección 02 — Mayor presencia visual de marca</strong>
+    Logo-mark con ring de resplandor ámbar (box-shadow), texto más grande, botón "Publicar entrada" con doble ring de énfasis. La marca se ve como plataforma consolidada, no un MVP.</div>
+  </div>
+
+  <div class="group-label">Navbar — Visitante no autenticado</div>
+  <div class="navbar no-break">
+    <div class="nav-logo">
+      <div class="nav-logo-mark">🎟</div>
+      <div class="nav-logo-text">Trans<span>fiero</span></div>
+    </div>
+    <div class="nav-links">
+      <span class="nav-link active">Marketplace</span>
+      <span class="nav-link">Cómo funciona</span>
+      <span class="nav-link">Ayuda</span>
+    </div>
+    <div class="nav-actions">
+      <span class="nav-login-btn">Iniciar sesión</span>
+      <span class="nav-reg-btn">Registrarse gratis</span>
+    </div>
+  </div>
+
+  <div class="group-label">Navbar — Comprador autenticado</div>
+  <div class="navbar no-break">
+    <div class="nav-logo">
+      <div class="nav-logo-mark">🎟</div>
+      <div class="nav-logo-text">Trans<span>fiero</span></div>
+    </div>
+    <div class="nav-links">
+      <span class="nav-link active">Marketplace</span>
+      <span class="nav-link">Mis Compras</span>
+      <span class="nav-link">Cómo funciona</span>
+    </div>
+    <div class="nav-actions">
+      <div style="position:relative">
+        <div style="width:32px;height:32px;background:rgba(255,255,255,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:14px">🔔</div>
+        <div style="position:absolute;top:-2px;right:-2px;width:14px;height:14px;background:var(--amber-500);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:var(--gray-900)">3</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px;padding:5px 10px;border-radius:8px;background:rgba(255,255,255,.08)">
+        <div style="width:26px;height:26px;background:var(--navy-600);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:10px;font-weight:700">CR</div>
+        <span style="color:white;font-size:12px;font-weight:500">Carlos R.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CORRECCIÓN 05: CTA DOMINANTE -->
+  <div class="correction-callout">
+    <div>✦</div>
+    <div><strong>Corrección 05 — CTA "Publicar entrada" más dominante</strong>
+    En el navbar del vendedor aprobado, el botón tiene doble ring ámbar y texto en negrita. En el hero del marketplace, hay un banner dedicado con CTA grande y ring triple de énfasis.</div>
+  </div>
+
+  <div class="group-label">Navbar — Vendedor aprobado (CTA dominante)</div>
+  <div class="navbar no-break">
+    <div class="nav-logo">
+      <div class="nav-logo-mark">🎟</div>
+      <div class="nav-logo-text">Trans<span>fiero</span></div>
+    </div>
+    <div class="nav-links">
+      <span class="nav-link">Marketplace</span>
+      <span class="nav-link active">Mis Ventas</span>
+      <span class="nav-link">Mis Publicaciones</span>
+      <span class="nav-link">Mis Compras</span>
+    </div>
+    <div class="nav-actions">
+      <div class="nav-publish-btn">📢 Publicar entrada</div>
+      <div style="display:flex;align-items:center;gap:7px;padding:5px 10px;border-radius:8px;background:rgba(255,255,255,.08)">
+        <div style="width:26px;height:26px;background:var(--amber-500);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gray-900);font-size:10px;font-weight:700">MV</div>
+        <span style="color:white;font-size:12px;font-weight:500">María V.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="group-label" style="margin-top:20px">Footer</div>
+  <div class="footer no-break">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div style="display:flex;align-items:center;gap:9px">
+          <div class="nav-logo-mark">🎟</div>
+          <div class="nav-logo-text">Trans<span>fiero</span></div>
+        </div>
+        <p>La plataforma peruana de transferencia segura de entradas entre particulares. Compramos y vendemos con confianza.</p>
+        <div class="escrow-badge">🔒 Pagos con custodia escrow</div>
+      </div>
+      <div class="footer-col">
+        <h4>Plataforma</h4>
+        <ul><li>Marketplace</li><li>Cómo funciona</li><li>Vender entradas</li><li>Garantías</li></ul>
+      </div>
+      <div class="footer-col">
+        <h4>Soporte</h4>
+        <ul><li>Centro de ayuda</li><li>Disputas</li><li>Contacto</li><li>Estado del sistema</li></ul>
+      </div>
+      <div class="footer-col">
+        <h4>Empresa</h4>
+        <ul><li>Sobre nosotros</li><li>Blog</li><li>Instagram</li><li>TikTok</li></ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div style="color:var(--gray-600)">© 2026 Transfiero. Plataforma de intermediación registrada en Perú.</div>
+      <div class="footer-legal"><span>Términos de uso</span><span>Privacidad</span><span>Cookies</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     4. MARKETPLACE
+══════════════════════════════════════════════════════ -->
+<div class="section-header">
+  <div>
+    <div class="section-num">Sección 04</div>
+    <div class="section-title">Marketplace</div>
+  </div>
+  <div class="section-sub-text">Página principal pública — hero, banner vendedor, filtros, grid con urgencia</div>
+</div>
+
+<div class="content">
+
+  <!-- HERO COMPRADOR -->
+  <div class="group-label">Hero — Visitante / Comprador</div>
+  <div class="hero no-break">
+    <div class="hero-content">
+      <div class="hero-badge">🎟 +120 entradas disponibles hoy</div>
+      <div class="hero-title">Entradas seguras.<br>Sin estafas. <span>Sin riesgos.</span></div>
+      <div class="hero-sub">Compra y vende entradas entre personas con pago en custodia. Tu dinero está protegido hasta confirmar tu entrada.</div>
+      <div class="search-bar">
+        <input class="search-input" type="text" placeholder="Busca artista, evento o lugar..." readonly>
+        <div class="search-btn">Buscar entradas →</div>
+      </div>
+      <div class="hero-trust">
+        <div class="trust-item">🔒 Pago en custodia</div>
+        <div class="trust-item">✅ Vendedores verificados</div>
+        <div class="trust-item">⚡ Respuesta en 15 min</div>
+        <div class="trust-item">🇵🇪 Hecho en Perú</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CORRECCIÓN 05: HERO VENDEDOR CTA DOMINANTE -->
+  <div class="group-label">Hero — Vendedor aprobado (banner CTA dominante)</div>
+  <div class="hero-vendedor no-break">
+    <div class="hero-vendedor-content">
+      <h2>¿Tienes entradas que no vas a usar?</h2>
+      <p>Vende de forma segura en Transfiero. Recibes el pago directamente cuando el comprador confirma que recibió su entrada.</p>
+      <div style="margin-top:10px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+        <span class="trust-item" style="font-size:12px">✅ DNI verificado</span>
+        <span class="trust-item" style="font-size:12px">💰 Sin riesgo de estafa</span>
+        <span class="trust-item" style="font-size:12px">⚡ En minutos</span>
+      </div>
+    </div>
+    <div class="hero-vendedor-cta">
+      📢 Publicar mi entrada
+    </div>
+  </div>
+
+  <!-- FILTROS -->
+  <div class="group-label" style="margin-top:4px">Filtros y ordenamiento</div>
+  <div class="filtros">
+    <div class="chip active">Todos</div>
+    <div class="chip">🎵 Conciertos</div>
+    <div class="chip">⚽ Deportes</div>
+    <div class="chip">🎪 Festivales</div>
+    <div class="chip">🎭 Teatro</div>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <div style="font-size:12px;color:var(--gray-500)">32 entradas disponibles</div>
+    <div style="font-size:12px;border:1.5px solid var(--gray-200);border-radius:8px;padding:5px 12px;color:var(--gray-700)">Ordenar: Más recientes ▾</div>
+  </div>
+
+  <!-- GRID CON URGENCIA -->
+  <div class="group-label">Grid de entradas — con badges de urgencia e imagen</div>
+  <div class="card-grid no-break">
+    <div class="card">
+      <div class="card-img grad-1" style="position:relative">
+        <div class="card-img-overlay"></div>
+        <div class="card-img-badges">
+          <span class="badge" style="background:rgba(22,163,74,.9);color:white;font-size:10px;padding:3px 7px"><span class="badge-dot" style="background:white"></span>Disponible</span>
+          <span class="card-urgency">⚡ 3 días</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-category">🎵 Concierto</div>
+        <div class="card-name">Bad Bunny — Most Wanted Tour</div>
+        <div class="card-meta">📅 22 Jun · 📍 Estadio Nacional</div>
+        <div class="card-footer">
+          <div><div style="font-size:10px;color:var(--gray-400)">Precio entrada</div><div class="card-price">S/ 220.00</div></div>
+          <button class="btn btn-primary btn-sm">Reservar</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img" style="background:linear-gradient(135deg,#134e5e,#71b280);position:relative">
+        <div class="card-img-overlay"></div>
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);font-size:36px;opacity:.25">🎤</div>
+        <div class="card-img-badges">
+          <span class="badge" style="background:rgba(22,163,74,.9);color:white;font-size:10px;padding:3px 7px"><span class="badge-dot" style="background:white"></span>Disponible</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-category">🎵 Concierto</div>
+        <div class="card-name">Romeo Santos — Formula Vol. 3</div>
+        <div class="card-meta">📅 19 Jul · 📍 Arena Lima</div>
+        <div class="card-footer">
+          <div><div style="font-size:10px;color:var(--gray-400)">Precio entrada</div><div class="card-price">S/ 290.00</div></div>
+          <button class="btn btn-primary btn-sm">Reservar</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img grad-2" style="position:relative">
+        <div class="card-img-overlay"></div>
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);font-size:36px;opacity:.25">⚽</div>
+        <div class="card-img-badges">
+          <span class="badge" style="background:rgba(234,88,12,.9);color:white;font-size:10px;padding:3px 7px"><span class="badge-dot" style="background:white"></span>Reservada</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-category">⚽ Deporte</div>
+        <div class="card-name">Alianza vs. Universitario</div>
+        <div class="card-meta">📅 22 Jun · 📍 Monumental</div>
+        <div class="card-footer">
+          <div><div style="font-size:10px;color:var(--gray-400)">Precio entrada</div><div class="card-price">S/ 180.00</div></div>
+          <button class="btn btn-outline btn-sm" style="opacity:.5">Reservada</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img grad-4" style="position:relative">
+        <div class="card-img-overlay"></div>
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);font-size:36px;opacity:.25">🎭</div>
+        <div class="card-img-badges">
+          <span class="badge" style="background:rgba(22,163,74,.9);color:white;font-size:10px;padding:3px 7px"><span class="badge-dot" style="background:white"></span>Disponible</span>
+          <span class="card-urgency">⚡ ¡Mañana!</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-category">🎭 Teatro</div>
+        <div class="card-name">Canto Lírico — Última función</div>
+        <div class="card-meta">📅 20 Jun · 📍 Teatro Municipal</div>
+        <div class="card-footer">
+          <div><div style="font-size:10px;color:var(--gray-400)">Precio entrada</div><div class="card-price">S/ 95.00</div></div>
+          <button class="btn btn-primary btn-sm">Reservar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     5. DETALLE DE ENTRADA
+══════════════════════════════════════════════════════ -->
+<div class="section-header">
+  <div>
+    <div class="section-num">Sección 05</div>
+    <div class="section-title">Detalle de Entrada</div>
+  </div>
+  <div class="section-sub-text">Vista pública — imagen, urgencia, buy card, reputación, escasez</div>
+</div>
+
+<div class="content">
+  <div class="detail-layout no-break">
+    <div>
+      <!-- CORRECCIÓN 04: IMAGEN EN HERO + CORRECCIÓN 03: URGENCIA -->
+      <div class="detail-hero grad-1">
+        <div class="detail-hero-content">
+          <div style="margin-bottom:6px;display:flex;align-items:center;gap:6px">
+            <span class="badge" style="background:#DCFCE7;color:#16A34A"><span class="badge-dot" style="background:#16A34A"></span>Disponible</span>
+            <span style="display:inline-flex;align-items:center;gap:3px;background:#EF4444;color:white;font-size:10px;font-weight:700;padding:3px 8px;border-radius:9999px">⚡ En 3 días</span>
+          </div>
+          <div class="detail-event-title">Bad Bunny — Most Wanted Tour</div>
+          <div>
+            <span class="event-meta-pill">📅 Sáb 22 Jun 2026 · 8:00 PM</span>
+            <span class="event-meta-pill">📍 Estadio Nacional, Lima</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-info">
+        <h3>Detalles de la entrada</h3>
+        <div class="detail-row"><span class="detail-label">Categoría</span><span class="detail-value">🎵 Concierto</span></div>
+        <div class="detail-row"><span class="detail-label">Ticketera</span><span class="detail-value">Teleticket</span></div>
+        <div class="detail-row"><span class="detail-label">Zona / Sector</span><span class="detail-value">Platea Norte</span></div>
+        <div class="detail-row"><span class="detail-label">Asiento</span><span class="detail-value">Fila F · Asiento 12</span></div>
+        <div class="detail-row"><span class="detail-label">Precio original</span><span class="detail-value">S/ 200.00</span></div>
+      </div>
+
+      <div class="detail-info" style="margin-top:10px">
+        <h3>¿Cómo funciona Transfiero?</h3>
+        <div class="how-grid">
+          <div class="how-item"><div class="how-num">1</div><div><div class="how-title">Reservas y el vendedor acepta</div><div class="how-sub">Tiene 15 min para responder tu solicitud</div></div></div>
+          <div class="how-item"><div class="how-num">2</div><div><div class="how-title">Pagas a Transfiero (en custodia)</div><div class="how-sub">Yape, Plin, transferencia o tarjeta</div></div></div>
+          <div class="how-item"><div class="how-num">3</div><div><div class="how-title">Confirmas que recibiste tu entrada</div><div class="how-sub">Recién entonces el vendedor cobra</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="buy-card">
+        <div class="buy-card-title">Resumen de compra</div>
+        <div class="price-breakdown">
+          <div class="price-row"><span style="color:var(--gray-600)">Precio de entrada</span><span style="font-weight:600">S/ 220.00</span></div>
+          <div class="price-row"><span style="color:var(--gray-600)">Comisión Transfiero (7%)</span><span style="font-weight:600">S/ 15.40</span></div>
+          <div class="price-row-total"><span style="color:var(--gray-900)">Total a pagar</span><span style="color:#1B3A6B">S/ 235.40</span></div>
+        </div>
+
+        <!-- CORRECCIÓN 05: CTA GRANDE Y DOMINANTE -->
+        <button class="btn btn-primary btn-lg" style="width:100%;justify-content:center;border-radius:10px;font-size:15px;padding:14px">🎟 Reservar entrada</button>
+        <div style="text-align:center;font-size:10px;color:var(--gray-400);margin-top:8px">Necesitas una cuenta para reservar</div>
+
+        <div class="trust-badge-row">
+          <div class="trust-badge-item"><div style="font-size:16px;margin-bottom:3px">🔒</div>Pago seguro</div>
+          <div class="trust-badge-item"><div style="font-size:16px;margin-bottom:3px">↩️</div>Reembolso</div>
+          <div class="trust-badge-item"><div style="font-size:16px;margin-bottom:3px">⚡</div>15 min</div>
+        </div>
+
+        <!-- CORRECCIÓN 01: REPUTACIÓN DE VENDEDOR EN BUY CARD -->
+        <div class="seller-mini">
+          <div class="seller-avatar">MV</div>
+          <div class="seller-info">
+            <div class="seller-name">María Villanueva</div>
+            <div><span class="seller-rep rep-top">⭐ Top vendedor</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CORRECCIÓN 03: SCARCITY BANNER -->
+      <div class="scarcity-banner" style="margin-top:12px">
+        👀 Varias personas están viendo esta entrada ahora
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     6. MIS COMPRAS
+══════════════════════════════════════════════════════ -->
+<div class="section-header">
+  <div>
+    <div class="section-num">Sección 06</div>
+    <div class="section-title">Mis Compras</div>
+  </div>
+  <div class="section-sub-text">Vista del comprador — historial de operaciones y seguimiento activo</div>
+</div>
+
+<div class="content">
+
+  <div class="group-label">Lista de operaciones</div>
+  <div class="op-card no-break" style="border-left:4px solid var(--amber-500)">
+    <div class="op-thumb grad-1">🎵</div>
+    <div class="op-info">
+      <div class="op-name">Bad Bunny — Most Wanted Tour</div>
+      <div class="op-meta">📅 22 Jun 2026 · Estadio Nacional</div>
+      <div style="margin-top:5px"><span class="badge" style="background:#FEF3C7;color:#B45309"><span class="badge-dot" style="background:#B45309"></span>Pendiente de pago</span></div>
+    </div>
+    <div class="op-right">
+      <div class="op-amount">S/ 235.40</div>
+      <div class="op-date">Reservado hoy</div>
+      <div style="margin-top:4px;font-size:11px;color:var(--amber-500);font-weight:600">Acción →</div>
+    </div>
+  </div>
+  <div class="op-card no-break">
+    <div class="op-thumb grad-3">⚽</div>
+    <div class="op-info">
+      <div class="op-name">Alianza vs. Universitario — Clásico</div>
+      <div class="op-meta">📅 30 Jun 2026 · Estadio Monumental</div>
+      <div style="margin-top:5px"><span class="badge" style="background:#EDE9FE;color:#7C3AED"><span class="badge-dot" style="background:#7C3AED"></span>En transferencia</span></div>
+    </div>
+    <div class="op-right">
+      <div class="op-amount">S/ 192.60</div>
+      <div class="op-date">Hace 2 días</div>
+    </div>
+  </div>
+  <div class="op-card no-break" style="opacity:.75">
+    <div class="op-thumb grad-4">🎪</div>
+    <div class="op-info">
+      <div class="op-name">Tomorrowland Lima 2026</div>
+      <div class="op-meta">📅 5 Jul 2026 · La Molina</div>
+      <div style="margin-top:5px"><span class="badge" style="background:#DCFCE7;color:#166534"><span class="badge-dot" style="background:#166534"></span>Fondos liberados</span></div>
+    </div>
+    <div class="op-right">
+      <div class="op-amount">S/ 374.50</div>
+      <div class="op-date">Hace 1 semana</div>
+    </div>
+  </div>
+
+  <div class="group-label" style="margin-top:20px">Detalle de operación activa — seguimiento</div>
+  <div style="background:var(--navy-900);border-radius:12px;padding:20px;color:white;display:flex;align-items:center;gap:16px;margin-bottom:16px" class="no-break">
+    <div class="op-thumb grad-1">🎵</div>
+    <div>
+      <div style="margin-bottom:5px"><span class="badge" style="background:#FEF3C7;color:#B45309"><span class="badge-dot" style="background:#B45309"></span>Pendiente de pago</span></div>
+      <div style="font-size:17px;font-weight:800">Bad Bunny — Most Wanted Tour</div>
+      <div style="font-size:12px;color:var(--gray-400);margin-top:3px">📅 Sáb 22 Jun 2026 · 8:00 PM — Estadio Nacional, Lima</div>
+      <div style="font-size:10px;color:var(--gray-600);margin-top:3px">Operación #TF-2847</div>
+    </div>
+  </div>
+
+  <div class="grid-2 no-break">
+    <div class="card" style="padding:18px">
+      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--gray-500);margin-bottom:12px">Seguimiento</div>
+      <div class="timeline">
+        <div class="timeline-item"><div class="timeline-dot dot-done"></div><div class="timeline-label">Reserva creada</div><div class="timeline-sub">Hoy 10:32 AM</div></div>
+        <div class="timeline-item"><div class="timeline-dot dot-done"></div><div class="timeline-label">Vendedor aceptó</div><div class="timeline-sub">Hoy 10:40 AM</div></div>
+        <div class="timeline-item"><div class="timeline-dot dot-current"></div><div class="timeline-label">Esperando tu pago</div><div class="timeline-sub">Realiza el pago a Transfiero</div></div>
+        <div class="timeline-item"><div class="timeline-dot dot-pending"></div><div class="timeline-label">Pago confirmado por admin</div><div class="timeline-sub" style="color:var(--gray-400)">Pendiente</div></div>
+        <div class="timeline-item"><div class="timeline-dot dot-pending"></div><div class="timeline-label">Entrada en camino</div><div class="timeline-sub" style="color:var(--gray-400)">Pendiente</div></div>
+        <div class="timeline-item"><div class="timeline-dot dot-pending"></div><div class="timeline-label">Confirmación</div><div class="timeline-sub" style="color:var(--gray-400)">Pendiente</div></div>
+        <div class="timeline-item" style="margin-bottom:0"><div class="timeline-dot dot-pending"></div><div class="timeline-label">¡Entrada recibida!</div><div class="timeline-sub" style="color:var(--gray-400)">Pendiente</div></div>
+      </div>
+    </div>
+    <div class="card" style="padding:18px">
+      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--gray-500);margin-bottom:12px">Resumen de pago</div>
+      <div class="price-breakdown">
+        <div class="price-row"><span style="color:var(--gray-600)">Precio de entrada</span><span style="font-weight:600">S/ 220.00</span></div>
+        <div class="price-row"><span style="color:var(--gray-600)">Comisión Transfiero (7%)</span><span style="font-weight:600">S/ 15.40</span></div>
+        <div class="price-row-total"><span>Total a pagar</span><span style="color:#1B3A6B">S/ 235.40</span></div>
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:10px;border-radius:8px">💳 Realizar pago</button>
+      <button class="btn btn-outline" style="width:100%;justify-content:center;margin-top:8px;border-radius:8px;color:#DC2626;border-color:#FEE2E2;font-size:12px">Cancelar reserva</button>
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--gray-100)">
+        <div style="font-size:11px;font-weight:600;color:var(--gray-600);margin-bottom:6px">Vendedor</div>
+        <div class="seller-mini" style="padding:0;border-top:none;margin-top:0">
+          <div class="seller-avatar" style="width:28px;height:28px;font-size:10px">MV</div>
+          <div class="seller-info">
+            <div class="seller-name">María Villanueva</div>
+            <span class="seller-rep rep-top" style="font-size:9px">⭐ Top vendedor</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     7. MIS VENTAS
+══════════════════════════════════════════════════════ -->
+<div class="section-header">
+  <div>
+    <div class="section-num">Sección 07</div>
+    <div class="section-title">Mis Ventas</div>
+  </div>
+  <div class="section-sub-text">Vista del vendedor — reservas recibidas, countdown, acciones urgentes, historial</div>
+</div>
+
+<div class="content">
+
+  <div class="group-label">Dashboard de métricas</div>
+  <div class="stat-grid no-break">
+    <div class="stat-card">
+      <div class="stat-label">Reservas activas</div>
+      <div class="stat-value">3</div>
+      <div class="stat-sub" style="color:var(--amber-500);font-weight:500">2 requieren acción</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">En custodia</div>
+      <div class="stat-value" style="color:#1B3A6B">S/ 642</div>
+      <div class="stat-sub">Pendiente de liberar</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Completadas</div>
+      <div class="stat-value" style="color:#16A34A">7</div>
+      <div class="stat-sub">Fondos liberados</div>
+    </div>
+  </div>
+
+  <!-- RESERVAS URGENTES CON COUNTDOWN -->
+  <div class="group-label" style="color:var(--amber-500)">⚡ Requieren tu respuesta</div>
+
+  <div class="venta-card no-break">
+    <div class="venta-header">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="badge" style="background:#FEF9C3;color:#A16207"><span class="badge-dot" style="background:#A16207"></span>ESPERANDO_VENDEDOR</span>
+        <span style="font-size:11px;color:var(--gray-400)">Operación #TF-2847</span>
+      </div>
+      <div class="venta-timer">⏱ 08:23 restantes</div>
+    </div>
+    <div class="venta-body">
+      <div class="op-thumb grad-1">🎵</div>
+      <div class="op-info">
+        <div class="op-name">Bad Bunny — Most Wanted Tour</div>
+        <div class="op-meta">📅 22 Jun 2026 · Zona Platea Norte · Asiento F12</div>
+        <div style="margin-top:4px;font-size:12px;font-weight:600;color:#1B3A6B">Recibirás: <span style="font-size:15px">S/ 213.40</span> <span style="font-size:10px;font-weight:400;color:var(--gray-400)">(S/220 − 3% comisión)</span></div>
+      </div>
+    </div>
+    <div style="padding:0 18px 10px;font-size:11px;color:var(--gray-500)">
+      <strong style="color:var(--gray-700)">Comprador:</strong> Carlos R. · c***@gmail.com
+    </div>
+    <div class="venta-actions">
+      <button class="btn btn-success" style="flex:1;justify-content:center">✓ Aceptar reserva</button>
+      <button class="btn btn-danger" style="flex:1;justify-content:center">✕ Rechazar</button>
+    </div>
+  </div>
+
+  <!-- RESERVA CON TIMER URGENTE (< 5 min) -->
+  <div class="venta-card no-break">
+    <div class="venta-header">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="badge" style="background:#FEF9C3;color:#A16207"><span class="badge-dot" style="background:#A16207"></span>ESPERANDO_VENDEDOR</span>
+        <span style="font-size:11px;color:var(--gray-400)">Operación #TF-2851</span>
+      </div>
+      <div class="venta-timer urgent">⏱ 02:47 restantes</div>
+    </div>
+    <div class="venta-body">
+      <div class="op-thumb grad-4">🎪</div>
+      <div class="op-info">
+        <div class="op-name">Tomorrowland Lima 2026</div>
+        <div class="op-meta">📅 5 Jul 2026 · Entrada General</div>
+        <div style="margin-top:4px;font-size:12px;font-weight:600;color:#1B3A6B">Recibirás: <span style="font-size:15px">S/ 339.50</span> <span style="font-size:10px;font-weight:400;color:var(--gray-400)">(S/350 − 3%)</span></div>
+      </div>
+    </div>
+    <div class="venta-actions">
+      <button class="btn btn-success" style="flex:1;justify-content:center">✓ Aceptar reserva</button>
+      <button class="btn btn-danger" style="flex:1;justify-content:center">✕ Rechazar</button>
+    </div>
+  </div>
+
+  <!-- HISTORIAL -->
+  <div class="group-label" style="margin-top:20px">Historial de ventas</div>
+  <div class="op-card no-break" style="opacity:.85">
+    <div class="op-thumb" style="background:linear-gradient(135deg,#134e5e,#71b280)">🎤</div>
+    <div class="op-info">
+      <div class="op-name">Romeo Santos — Formula Vol. 3</div>
+      <div class="op-meta">📅 19 Jul 2026 · Arena Lima</div>
+      <div style="margin-top:5px"><span class="badge" style="background:#DCFCE7;color:#166534"><span class="badge-dot" style="background:#166534"></span>Fondos liberados</span></div>
+    </div>
+    <div class="op-right">
+      <div class="op-amount" style="color:#16A34A">+S/ 281.30</div>
+      <div class="op-date">Hace 3 días</div>
+    </div>
+  </div>
+
+  <!-- RESUMEN DE DECISIONES -->
+  <div style="margin-top:32px;padding:20px;background:var(--navy-50);border:1px solid var(--navy-100);border-radius:12px">
+    <div style="font-size:12px;font-weight:700;color:#1B3A6B;margin-bottom:12px">📋 Las 5 correcciones — Decisiones de diseño</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;font-size:11px;color:var(--gray-600)">
+      <div style="background:white;border-radius:8px;padding:12px;border:1px solid var(--gray-100)">
+        <div style="font-weight:700;color:#1B3A6B;margin-bottom:4px">01 · Reputación de vendedor</div>
+        3 niveles (Top / Confiable / Verificado) derivados del conteo de ventas completadas. Visible siempre en la buy card. Genera confianza diferenciada según track record.
+      </div>
+      <div style="background:white;border-radius:8px;padding:12px;border:1px solid var(--gray-100)">
+        <div style="font-weight:700;color:#1B3A6B;margin-bottom:4px">02 · Presencia visual de marca</div>
+        Logo-mark con ring ámbar de resplandor, tipografía más grande en navbar, tagline "Entradas seguras · Sin estafas" en hero. Navy + Amber como identidad dominante.
+      </div>
+      <div style="background:white;border-radius:8px;padding:12px;border:1px solid var(--gray-100)">
+        <div style="font-weight:700;color:#1B3A6B;margin-bottom:4px">03 · Escasez y urgencia</div>
+        Badge rojo "⚡ X días" en cards para eventos ≤7 días. Scarcity banner "👀" en detalle. Timer urgente (rojo) para el vendedor cuando quedan &lt;5 min.
+      </div>
+      <div style="background:white;border-radius:8px;padding:12px;border:1px solid var(--gray-100)">
+        <div style="font-weight:700;color:#1B3A6B;margin-bottom:4px">04 · Imagen del evento en cards</div>
+        Campo imagenPortadaUrl en Publicacion. Cards muestran foto con overlay negro. Fallback: gradiente de categoría + icono al 25% de opacidad. Badges sobre el overlay.
+      </div>
+      <div style="background:white;border-radius:8px;padding:12px;border:1px solid var(--gray-100);grid-column:span 2">
+        <div style="font-weight:700;color:#1B3A6B;margin-bottom:4px">05 · CTA Publicar Entrada dominante</div>
+        Navbar vendedor: botón con doble ring ámbar. Marketplace: banner dedicado para vendedores aprobados con CTA grande, triple ring y fondo navy con gradiente lateral. No compite visualmente con el buscador del comprador.
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

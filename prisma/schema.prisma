@@ -1,0 +1,534 @@
+// Transfiero — schema.prisma
+// Módulo 2: Modelo de datos completo
+// Módulo 3: Auth con NextAuth 5 + Prisma Adapter
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum RolUsuario {
+  COMPRADOR
+  VENDEDOR
+  ADMINISTRADOR
+}
+
+enum EstadoVendedor {
+  NO_SOLICITADO
+  PENDIENTE
+  APROBADO
+  RECHAZADO
+  SUSPENDIDO
+}
+
+enum EstadoCuenta {
+  ACTIVO
+  SUSPENDIDO
+  BANEADO
+}
+
+enum EstadoSolicitud {
+  PENDIENTE
+  APROBADA
+  RECHAZADA
+}
+
+enum CategoriaEvento {
+  CONCIERTO
+  DEPORTE
+  FESTIVAL
+  TEATRO
+  OTRO
+}
+
+enum TipoInteresConcierto {
+  VISUALIZACION
+  RESERVA
+}
+
+enum EstadoPublicacion {
+  BORRADOR
+  PENDIENTE_REVISION
+  APROBADA
+  DISPONIBLE
+  PENDIENTE_VENDEDOR
+  RESERVADA
+  EN_TRANSFERENCIA
+  TRANSFERIDA
+  COMPLETADA
+  CANCELADA
+  EN_DISPUTA
+}
+
+enum EstadoOperacion {
+  ESPERANDO_VENDEDOR
+  PAGO_PENDIENTE
+  PAGO_RECIBIDO
+  VENDEDOR_NOTIFICADO
+  TRANSFERENCIA_EN_PROCESO
+  PENDIENTE_CONFIRMACION_COMPRADOR
+  COMPRADOR_CONFIRMADO
+  FONDOS_LIBERADOS
+  REEMBOLSADA
+  EN_DISPUTA
+  CANCELADA
+}
+
+enum TipoReembolso {
+  TOTAL
+  PARCIAL_COMISION
+}
+
+enum MotivoReembolso {
+  FRAUDE_VENDEDOR
+  TICKET_INVALIDO
+  INCUMPLIMIENTO_VENDEDOR
+  ERROR_TRANSFIERO
+  DISPUTA_RESUELTA_COMPRADOR
+  ARREPENTIMIENTO_COMPRADOR
+  CANCELACION_SOLICITADA_COMPRADOR
+  COMPRADOR_NO_RESPONDE
+  CASO_EXTRAORDINARIO
+}
+
+enum TipoPago {
+  YAPE
+  PLIN
+  TRANSFERENCIA_BANCARIA
+  TARJETA
+}
+
+enum EstadoPago {
+  PENDIENTE
+  RECIBIDO
+  RECHAZADO
+  DEVUELTO
+}
+
+enum TipoEvidencia {
+  DNI_FRONTAL
+  DNI_POSTERIOR
+  COMPRA_ENTRADA
+  TICKET
+  TRANSFERENCIA
+  PAGO
+  DISPUTA
+  OTRO
+}
+
+enum EstadoDisputa {
+  ABIERTA
+  EN_REVISION
+  RESUELTA_VENDEDOR
+  RESUELTA_COMPRADOR
+}
+
+enum EstadoRetiro {
+  PENDIENTE
+  PROCESADO
+  RECHAZADO
+}
+
+enum TipoCuenta {
+  AHORROS
+  CORRIENTE
+}
+
+enum Ticketera {
+  JOINNUS
+  TELETICKET
+  TICKETMASTER
+}
+
+// ─── Modelos ──────────────────────────────────────────────────────────────────
+
+model Usuario {
+  id               String         @id @default(cuid())
+  email            String         @unique
+  emailVerificado  DateTime?      @map("emailVerified")
+  passwordHash     String?
+  nombre           String         @map("name")
+  nombres          String?
+  apellidos        String?
+  dni              String?        @unique
+  telefono         String?
+  imagenUrl        String?        @map("image")
+  rolPrincipal     RolUsuario     @default(COMPRADOR)
+  estadoVendedor   EstadoVendedor @default(NO_SOLICITADO)
+  estadoCuenta     EstadoCuenta   @default(ACTIVO)
+  creadoEn         DateTime       @default(now())
+  actualizadoEn    DateTime       @updatedAt
+
+  // NextAuth
+  accounts  Account[]
+  sessions  Session[]
+
+  // Relaciones salientes
+  solicitudes                 SolicitudVendedor[] @relation("UsuarioSolicitudes")
+  solicitudesRevisadas        SolicitudVendedor[] @relation("AdminRevisorSolicitud")
+  cuentasBancarias            CuentaBancaria[]
+  publicaciones               Publicacion[]       @relation("VendedorPublicaciones")
+  publicacionesAprobadas      Publicacion[]       @relation("AdminAprobadorPublicacion")
+  operacionesComoComprador    Operacion[]         @relation("CompradorOperaciones")
+  operacionesComoVendedor     Operacion[]         @relation("VendedorOperaciones")
+  operacionesLiberadas        Operacion[]         @relation("AdminLiberadorOperacion")
+  pagos                       Pago[]              @relation("PagadorPagos")
+  pagosConfirmados            Pago[]              @relation("AdminConfirmadorPago")
+  evidencias                  Evidencia[]
+  disputasAbiertas            Disputa[]           @relation("CompradorDisputa")
+  disputasResueltas           Disputa[]           @relation("AdminResolvedorDisputa")
+  comentariosDisputa          ComentarioDisputa[]
+  retiros                     Retiro[]            @relation("VendedorRetiros")
+  retirosProcessados          Retiro[]            @relation("AdminProcesadorRetiro")
+  notificaciones              Notificacion[]
+  auditoria                   Auditoria[]
+  reembolsosAdministrados     Reembolso[]     @relation("AdminReembolso")
+
+  @@index([estadoCuenta])
+  @@map("usuarios")
+}
+
+// ─── Modelos NextAuth (adapter) ───────────────────────────────────────────────
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user Usuario @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user Usuario @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+model SolicitudVendedor {
+  id              String          @id @default(cuid())
+  usuarioId       String
+  estado          EstadoSolicitud @default(PENDIENTE)
+  motivoRechazo   String?
+  revisadoPorId   String?
+  revisadoEn      DateTime?
+  creadoEn        DateTime        @default(now())
+
+  usuario      Usuario     @relation("UsuarioSolicitudes", fields: [usuarioId], references: [id])
+  revisadoPor  Usuario?    @relation("AdminRevisorSolicitud", fields: [revisadoPorId], references: [id])
+  evidencias   Evidencia[]
+
+  @@index([usuarioId, estado])
+  @@map("solicitudes_vendedor")
+}
+
+model CuentaBancaria {
+  id                String     @id @default(cuid())
+  usuarioId         String
+  banco             String
+  tipoCuenta        TipoCuenta
+  numeroCuenta      String
+  cci               String?
+  titular           String
+  documentoTitular  String
+  activo            Boolean    @default(true)
+  creadoEn          DateTime   @default(now())
+  actualizadoEn     DateTime   @updatedAt
+  eliminadoEn       DateTime?
+
+  usuario  Usuario   @relation(fields: [usuarioId], references: [id])
+  retiros  Retiro[]
+
+  @@index([usuarioId, activo])
+  @@index([eliminadoEn])
+  @@map("cuentas_bancarias")
+}
+
+model Publicacion {
+  id                      String            @id @default(cuid())
+  vendedorId              String
+  nombreEvento            String
+  fechaEvento             DateTime
+  lugarEvento             String
+  categoria               CategoriaEvento
+  descripcion             String?
+  precioOriginalCentimos  Int
+  precioVentaCentimos     Int
+  zona                    String?
+  asiento                 String?
+  ticketera               String?
+  ticketeraEnum           Ticketera?
+  estado                    EstadoPublicacion @default(BORRADOR)
+  aprobadoPorId             String?
+  aprobadoEn                DateTime?
+  motivoRechazo             String?
+  imagenPortadaUrl          String?
+  imagenPortadaCloudinaryId String?
+  artista                   String?
+  spotifyEmbedUrl           String?
+  creadoEn                  DateTime          @default(now())
+  actualizadoEn             DateTime          @updatedAt
+  eliminadoEn               DateTime?
+
+  vendedor         Usuario              @relation("VendedorPublicaciones", fields: [vendedorId], references: [id])
+  aprobadoPor      Usuario?             @relation("AdminAprobadorPublicacion", fields: [aprobadoPorId], references: [id])
+  operaciones      Operacion[]
+  evidencias       Evidencia[]
+  interesConcierto InteresConcierto[]
+
+  @@index([estado, fechaEvento])
+  @@index([vendedorId, estado])
+  @@index([eliminadoEn])
+  @@map("publicaciones")
+}
+
+model Operacion {
+  id                          String          @id @default(cuid())
+  publicacionId               String
+  compradorId                 String
+  vendedorId                  String
+  estado                      EstadoOperacion @default(ESPERANDO_VENDEDOR)
+  precioVentaCentimos         Int
+  comisionCompradorCentimos   Int
+  comisionVendedorCentimos    Int
+  montoCompradorCentimos      Int
+  montoVendedorCentimos       Int
+  reservadaEn                 DateTime
+  reservaExpiraEn             DateTime
+  vendedorAceptoEn            DateTime?
+  liberadoPorId                 String?
+  fechaLiberacion               DateTime?
+  mpPreferenceId                String?
+  cuentaDestinoComprador        String?
+  fechaTransferenciaValidada    DateTime?
+  fechaInicioConfirmacion       DateTime?
+  fechaLimiteConfirmacion       DateTime?
+  fechaLiberacionAutomatica     DateTime?
+  motivoLiberacion              String?
+  comisionPaseraCentimos        Int             @default(0)
+  avisoVencimientoEnviadoEn     DateTime?
+  creadoEn                      DateTime        @default(now())
+  actualizadoEn                 DateTime        @updatedAt
+  eliminadoEn                   DateTime?
+
+  publicacion  Publicacion @relation(fields: [publicacionId], references: [id])
+  comprador    Usuario     @relation("CompradorOperaciones", fields: [compradorId], references: [id])
+  vendedor     Usuario     @relation("VendedorOperaciones", fields: [vendedorId], references: [id])
+  liberadoPor  Usuario?    @relation("AdminLiberadorOperacion", fields: [liberadoPorId], references: [id])
+  pagos        Pago[]
+  evidencias   Evidencia[]
+  disputa      Disputa?
+  retiro       Retiro?
+  reembolso    Reembolso?
+
+  @@index([publicacionId, estado])
+  @@index([compradorId, estado])
+  @@index([vendedorId, estado])
+  @@index([reservaExpiraEn, estado])
+  @@index([eliminadoEn])
+  @@map("operaciones")
+}
+
+model Pago {
+  id                 String     @id @default(cuid())
+  operacionId        String
+  pagadorId          String
+  tipo               TipoPago
+  estado             EstadoPago @default(PENDIENTE)
+  montoCentimos      Int
+  referenciaExterna  String?
+  pasarelaId         String?
+  confirmadoPorId    String?
+  confirmadoEn       DateTime?
+  creadoEn           DateTime   @default(now())
+
+  operacion      Operacion @relation(fields: [operacionId], references: [id])
+  pagador        Usuario   @relation("PagadorPagos", fields: [pagadorId], references: [id])
+  confirmadoPor  Usuario?  @relation("AdminConfirmadorPago", fields: [confirmadoPorId], references: [id])
+
+  @@index([operacionId])
+  @@index([referenciaExterna])
+  @@map("pagos")
+}
+
+model Evidencia {
+  id                   String        @id @default(cuid())
+  tipo                 TipoEvidencia
+  url                  String
+  cloudinaryId         String
+  publicacionId        String?
+  operacionId          String?
+  disputaId            String?
+  solicitudVendedorId  String?
+  subidoPorId          String
+
+  publicacion       Publicacion?       @relation(fields: [publicacionId], references: [id])
+  operacion         Operacion?         @relation(fields: [operacionId], references: [id])
+  disputa           Disputa?           @relation(fields: [disputaId], references: [id])
+  solicitudVendedor SolicitudVendedor? @relation(fields: [solicitudVendedorId], references: [id])
+  subidoPor         Usuario            @relation(fields: [subidoPorId], references: [id])
+
+  creadoEn  DateTime @default(now())
+
+  @@index([publicacionId])
+  @@index([operacionId])
+  @@index([disputaId])
+  @@index([solicitudVendedorId])
+  @@map("evidencias")
+}
+
+model Disputa {
+  id              String        @id @default(cuid())
+  numero          Int           @default(autoincrement())
+  operacionId     String        @unique
+  abridaPorId     String
+  estado          EstadoDisputa @default(ABIERTA)
+  motivo          String
+  resueltosPorId  String?
+  resolucionNota  String?
+  resueltaEn      DateTime?
+  creadoEn        DateTime      @default(now())
+  actualizadoEn   DateTime      @updatedAt
+
+  operacion     Operacion           @relation(fields: [operacionId], references: [id])
+  abridaPor     Usuario             @relation("CompradorDisputa", fields: [abridaPorId], references: [id])
+  resueltaPor   Usuario?            @relation("AdminResolvedorDisputa", fields: [resueltosPorId], references: [id])
+  comentarios   ComentarioDisputa[]
+  evidencias    Evidencia[]
+
+  @@index([estado])
+  @@map("disputas")
+}
+
+model ComentarioDisputa {
+  id          String   @id @default(cuid())
+  disputaId   String
+  autorId     String
+  contenido   String
+  creadoEn    DateTime @default(now())
+
+  disputa  Disputa @relation(fields: [disputaId], references: [id])
+  autor    Usuario @relation(fields: [autorId], references: [id])
+
+  @@index([disputaId])
+  @@map("comentarios_disputa")
+}
+
+model Retiro {
+  id                String       @id @default(cuid())
+  vendedorId        String
+  operacionId       String       @unique
+  cuentaBancariaId  String
+  montoCentimos     Int
+  estado            EstadoRetiro @default(PENDIENTE)
+  procesadoPorId    String?
+  procesadoEn       DateTime?
+  notaAdmin         String?
+  creadoEn          DateTime     @default(now())
+  actualizadoEn     DateTime     @updatedAt
+
+  vendedor       Usuario        @relation("VendedorRetiros", fields: [vendedorId], references: [id])
+  operacion      Operacion      @relation(fields: [operacionId], references: [id])
+  cuentaBancaria CuentaBancaria @relation(fields: [cuentaBancariaId], references: [id])
+  procesadoPor   Usuario?       @relation("AdminProcesadorRetiro", fields: [procesadoPorId], references: [id])
+
+  @@index([vendedorId, estado])
+  @@map("retiros")
+}
+
+model Notificacion {
+  id         String   @id @default(cuid())
+  usuarioId  String
+  titulo     String
+  cuerpo     String
+  leida      Boolean  @default(false)
+  url        String?
+  creadoEn   DateTime @default(now())
+
+  usuario  Usuario @relation(fields: [usuarioId], references: [id])
+
+  @@index([usuarioId, leida])
+  @@map("notificaciones")
+}
+
+model Auditoria {
+  id              String   @id @default(cuid())
+  entidad         String
+  entidadId       String
+  accion          String
+  estadoAnterior  String?
+  estadoNuevo     String?
+  actorId         String?
+  ip              String?
+  descripcion     String?
+  creadoEn        DateTime @default(now())
+
+  actor  Usuario? @relation(fields: [actorId], references: [id])
+
+  @@index([entidad, entidadId])
+  @@index([actorId])
+  @@index([creadoEn])
+  @@map("auditorias")
+}
+
+model Reembolso {
+  id                              String          @id @default(cuid())
+  operacionId                     String          @unique
+  tipo                            TipoReembolso
+  motivo                          MotivoReembolso
+  motivoDetalle                   String?
+  montoDevueltoCompradorCentimos  Int
+  comisionRetenidaCentimos        Int             @default(0)
+  comisionPaseraCentimos          Int             @default(0)
+  procesadoPorId                  String
+  procesadoEn                     DateTime        @default(now())
+
+  operacion    Operacion @relation(fields: [operacionId], references: [id])
+  procesadoPor Usuario   @relation("AdminReembolso", fields: [procesadoPorId], references: [id])
+
+  @@map("reembolsos")
+}
+
+model InteresConcierto {
+  id            String               @id @default(cuid())
+  publicacionId String
+  usuarioId     String?
+  tipo          TipoInteresConcierto
+  creadoEn      DateTime             @default(now())
+
+  publicacion Publicacion @relation(fields: [publicacionId], references: [id])
+
+  @@index([publicacionId, tipo])
+  @@index([usuarioId])
+  @@map("interes_concierto")
+}
