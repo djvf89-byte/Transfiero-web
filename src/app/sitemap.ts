@@ -4,7 +4,12 @@ import { listarPublicacionesSitemap } from "@/services/publicacion.service"
 const BASE_URL = process.env.AUTH_URL ?? "https://transfiero.pe"
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const publicaciones = await listarPublicacionesSitemap()
+  let publicaciones: Awaited<ReturnType<typeof listarPublicacionesSitemap>> = []
+  try {
+    publicaciones = await listarPublicacionesSitemap()
+  } catch {
+    // DB no disponible durante el build — el sitemap solo incluye páginas estáticas
+  }
 
   const estaticas: MetadataRoute.Sitemap = [
     { url: `${BASE_URL}/`,               lastModified: new Date(), changeFrequency: "daily",   priority: 1.0 },
