@@ -22,7 +22,7 @@ import bcrypt from "bcryptjs"
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL })
 const adapter = new PrismaPg(pool)
-const prisma = new PrismaClient({ adapter } as never)
+const prisma = new PrismaClient({ adapter } as never) as unknown as PrismaClient
 
 const USUARIOS = [
   {
