@@ -178,7 +178,6 @@ export function PublicacionForm({ publicacion, modo }: Props) {
         {/* Mapa de recinto */}
         <VenueMapaPicker
           defaultVenueSlug={publicacion?.venueSlug}
-          defaultZona={publicacion?.zona ?? undefined}
           onZoneSelected={(label) => {
             if (zonaRef.current && label) zonaRef.current.value = label
           }}

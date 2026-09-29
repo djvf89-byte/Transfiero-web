@@ -11,14 +11,12 @@ const LABEL = "block text-sm font-medium text-white/60 mb-1.5"
 
 interface Props {
   defaultVenueSlug?: string | null
-  defaultZona?: string
   onZoneSelected: (zoneLabel: string) => void
   onVenueSelected?: (venueName: string) => void
 }
 
 export default function VenueMapaPicker({
   defaultVenueSlug,
-  defaultZona,
   onZoneSelected,
   onVenueSelected,
 }: Props) {
