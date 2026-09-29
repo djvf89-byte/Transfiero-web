@@ -296,6 +296,7 @@ model Publicacion {
   imagenPortadaCloudinaryId String?
   artista                   String?
   spotifyEmbedUrl           String?
+  venueSlug                 String?
   creadoEn                  DateTime          @default(now())
   actualizadoEn             DateTime          @updatedAt
   eliminadoEn               DateTime?

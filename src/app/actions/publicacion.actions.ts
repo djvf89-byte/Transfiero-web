@@ -57,6 +57,7 @@ export async function crearPublicacionAction(formData: FormData) {
     zona: (formData.get("zona") as string) || undefined,
     asiento: (formData.get("asiento") as string) || undefined,
     ticketeraEnum: formData.get("ticketeraEnum") as string,
+    venueSlug: (formData.get("venueSlug") as string) || undefined,
   }
 
   const parsed = crearPublicacionSchema.safeParse(datos)
@@ -87,6 +88,7 @@ export async function editarPublicacionAction(id: string, formData: FormData) {
     zona: (formData.get("zona") as string) || undefined,
     asiento: (formData.get("asiento") as string) || undefined,
     ticketeraEnum: formData.get("ticketeraEnum") as string,
+    venueSlug: (formData.get("venueSlug") as string) || undefined,
   }
 
   const parsed = editarPublicacionSchema.safeParse(datos)

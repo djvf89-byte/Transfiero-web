@@ -6,6 +6,7 @@ import { crearPublicacionAction, editarPublicacionAction } from "@/app/actions/p
 import { ImagenEvidencia } from "./ImagenEvidencia"
 import { PortadaEvento } from "./PortadaEvento"
 import { TicketeraSelect } from "./TicketeraSelect"
+import VenueMapaPicker from "./VenueMapaPicker"
 import type { Publicacion } from "@prisma/client"
 
 const CATEGORIAS = [
@@ -25,6 +26,7 @@ interface Props {
     imagenPortadaUrl?: string | null
     artista?: string | null
     spotifyEmbedUrl?: string | null
+    venueSlug?: string | null
   }
   modo: "crear" | "editar"
 }
@@ -37,6 +39,8 @@ export function PublicacionForm({ publicacion, modo }: Props) {
     publicacion ? publicacion.precioOriginalCentimos / 100 * 1.1 : null
   )
   const formRef = useRef<HTMLFormElement>(null)
+  const zonaRef = useRef<HTMLInputElement>(null)
+  const lugarRef = useRef<HTMLInputElement>(null)
 
   function handlePrecioOriginalChange(e: React.ChangeEvent<HTMLInputElement>) {
     const val = parseFloat(e.target.value)
@@ -118,6 +122,7 @@ export function PublicacionForm({ publicacion, modo }: Props) {
         <div>
           <label className={LABEL}>Lugar del evento <span className="text-red-400">*</span></label>
           <input
+            ref={lugarRef}
             name="lugarEvento"
             defaultValue={publicacion?.lugarEvento}
             required
@@ -169,10 +174,29 @@ export function PublicacionForm({ publicacion, modo }: Props) {
       {/* Datos de la entrada */}
       <div className="rounded-2xl border border-white/8 bg-white/[0.04] p-5 space-y-4">
         <p className="text-xs font-bold uppercase tracking-wider text-white/30">Detalles de la entrada</p>
+
+        {/* Mapa de recinto */}
+        <VenueMapaPicker
+          defaultVenueSlug={publicacion?.venueSlug}
+          defaultZona={publicacion?.zona ?? undefined}
+          onZoneSelected={(label) => {
+            if (zonaRef.current && label) zonaRef.current.value = label
+          }}
+          onVenueSelected={(name) => {
+            if (lugarRef.current && !lugarRef.current.value) lugarRef.current.value = name
+          }}
+        />
+
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label className={LABEL}>Zona / Sector</label>
-            <input name="zona" defaultValue={publicacion?.zona ?? ""} className={INPUT} placeholder="Ej: Platea Norte" />
+            <input
+              ref={zonaRef}
+              name="zona"
+              defaultValue={publicacion?.zona ?? ""}
+              className={INPUT}
+              placeholder="Ej: Platea Norte"
+            />
           </div>
           <div>
             <label className={LABEL}>Asiento</label>

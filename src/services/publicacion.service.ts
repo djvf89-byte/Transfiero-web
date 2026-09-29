@@ -219,6 +219,7 @@ export async function crearPublicacion(vendedorId: string, datos: CrearPublicaci
       ticketeraEnum: datos.ticketeraEnum as Ticketera,
       artista: datos.artista,
       spotifyEmbedUrl: datos.spotifyEmbedUrl,
+      venueSlug: datos.venueSlug,
       estado: "BORRADOR",
     },
   })
@@ -294,6 +295,7 @@ export async function editarPublicacion(
       ticketeraEnum: datos.ticketeraEnum as Ticketera,
       artista: datos.artista,
       spotifyEmbedUrl: datos.spotifyEmbedUrl,
+      venueSlug: datos.venueSlug,
     },
   })
 

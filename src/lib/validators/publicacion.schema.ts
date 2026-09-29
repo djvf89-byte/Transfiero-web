@@ -24,6 +24,10 @@ export const publicacionBaseSchema = z.object({
   ticketeraEnum: z.enum(["JOINNUS", "TELETICKET", "TICKETMASTER"], {
     error: "Debes seleccionar la ticketera de la entrada",
   }),
+  venueSlug: z.preprocess(
+    (v) => (v === "" ? undefined : v),
+    z.string().max(100).optional()
+  ),
   artista: z.preprocess(
     (v) => (v === "" ? undefined : v),
     z.string().max(150, "Máximo 150 caracteres").optional()
