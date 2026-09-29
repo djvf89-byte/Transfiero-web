@@ -23,6 +23,7 @@ try {
 export default defineConfig({
   schema: "./prisma/schema.prisma",
   datasource: {
-    url: process.env.DATABASE_URL,
+    // Usar conexión directa (no pooled) para migraciones; caer a DATABASE_URL en dev local
+    url: process.env.DATABASE_URL_UNPOOLED ?? process.env.DATABASE_URL,
   },
 })
