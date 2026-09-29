@@ -23,14 +23,13 @@ export async function listarMarketplace(
     fecha_evento: { fechaEvento: "asc" as const },
   }[orden]
 
-  const CATEGORIAS_MARKETPLACE: CategoriaEvento[] = ["CONCIERTO", "DEPORTE"]
+  const CATEGORIAS_VALIDAS: CategoriaEvento[] = ["CONCIERTO", "DEPORTE", "FESTIVAL", "TEATRO", "OTRO"]
 
   const where = {
     estado: { in: ["DISPONIBLE", "PENDIENTE_VENDEDOR", "RESERVADA"] as EstadoPublicacion[] },
     eliminadoEn: null as null,
     fechaEvento: { gte: new Date() },
-    categoria: categoria ?? { in: CATEGORIAS_MARKETPLACE },
-    ticketeraEnum: { not: null },
+    categoria: categoria ?? { in: CATEGORIAS_VALIDAS },
   }
 
   const [publicaciones, total] = await Promise.all([
