@@ -117,3 +117,7 @@ export function getZoneLabel(venueSlug: string, zoneId: string): string {
   const venue = getVenueBySlug(venueSlug)
   return venue?.zones.find((z) => z.id === zoneId)?.label ?? zoneId
 }
+
+export function getZoneIdByLabel(venueSlug: string, label: string): string | undefined {
+  return getVenueBySlug(venueSlug)?.zones.find((z) => z.label === label)?.id
+}

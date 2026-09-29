@@ -2,6 +2,7 @@ import { notFound } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
 import type { Metadata } from "next"
+import dynamic from "next/dynamic"
 import { auth } from "@/lib/auth"
 import { obtenerPublicacionPublica, contarVentasCompletadas, contarDisputasVendedor } from "@/services/publicacion.service"
 import { ResumenFinancieroPublico } from "@/components/operaciones/ResumenFinanciero"
@@ -11,6 +12,9 @@ import { BotoneraReserva } from "@/components/marketplace/BotoneraReserva"
 import { SpotifyPlayer } from "@/components/publicaciones/SpotifyPlayer"
 import { RiesgoTicketera } from "@/components/publicaciones/RiesgoTicketera"
 import { TicketeraBadge } from "@/components/publicaciones/TicketeraBadge"
+import { getVenueBySlug, getZoneIdByLabel } from "@/lib/venues"
+
+const VenueMapa = dynamic(() => import("@/components/venue-maps/VenueMapa"), { ssr: false })
 
 const BASE_URL = process.env.AUTH_URL ?? "https://transfiero.pe"
 
@@ -233,6 +237,31 @@ export default async function DetalleEntradaPage({ params }: PageProps) {
                 ))}
             </dl>
           </div>
+
+          {/* Mapa del recinto */}
+          {publicacion.venueSlug && (() => {
+            const venue = getVenueBySlug(publicacion.venueSlug!)
+            const zoneId = publicacion.zona
+              ? getZoneIdByLabel(publicacion.venueSlug!, publicacion.zona)
+              : undefined
+            return venue ? (
+              <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
+                <h2 className="mb-3 text-sm font-bold uppercase tracking-wider text-gray-500">
+                  Mapa del recinto — {venue.name}
+                </h2>
+                {publicacion.zona && (
+                  <p className="mb-3 text-sm text-gray-600">
+                    Tu zona: <span className="font-semibold text-gray-900">{publicacion.zona}</span>
+                  </p>
+                )}
+                <VenueMapa
+                  venueSlug={publicacion.venueSlug!}
+                  mode="display"
+                  selectedZone={zoneId ?? null}
+                />
+              </div>
+            ) : null
+          })()}
 
           {/* Guía de transferencia por ticketera */}
           {publicacion.ticketeraEnum && (
