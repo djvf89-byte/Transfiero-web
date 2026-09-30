@@ -2,7 +2,16 @@ import { auth } from "@/lib/auth"
 import { NextResponse, type NextRequest } from "next/server"
 import type { Session } from "next-auth"
 
-const RUTAS_PUBLICAS = ["/", "/marketplace", "/403"]
+// Rutas que requieren sesión activa
+const RUTAS_PROTEGIDAS = [
+  "/dashboard",
+  "/mis-compras",
+  "/mis-ventas",
+  "/mis-publicaciones",
+  "/admin",
+  "/perfil",
+]
+
 const RUTAS_AUTH = ["/auth/login", "/auth/registro"]
 
 type AuthRequest = NextRequest & { auth: Session | null }
@@ -14,21 +23,21 @@ export default auth((req: AuthRequest) => {
   const session = req.auth
   const pathname = nextUrl.pathname
 
-  const esPublica = RUTAS_PUBLICAS.includes(pathname)
   const esAuth = RUTAS_AUTH.some((r) => pathname.startsWith(r))
-
-  if (esPublica) return NextResponse.next()
+  const esProtegida = RUTAS_PROTEGIDAS.some((r) => pathname.startsWith(r))
 
   if (esAuth) {
     if (session) return NextResponse.redirect(new URL("/dashboard", nextUrl))
     return NextResponse.next()
   }
 
-  if (!session) {
+  if (esProtegida && !session) {
     const loginUrl = new URL("/auth/login", nextUrl)
     loginUrl.searchParams.set("callbackUrl", pathname)
     return NextResponse.redirect(loginUrl)
   }
+
+  if (!session) return NextResponse.next()
 
   const { rolPrincipal, estadoVendedor, estadoCuenta } = session.user
 
