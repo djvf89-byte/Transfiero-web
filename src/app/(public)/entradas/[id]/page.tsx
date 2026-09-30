@@ -98,6 +98,10 @@ export default async function DetalleEntradaPage({ params }: PageProps) {
   const autenticado = !!session
   const esPropioVendedor = session?.user.id === publicacion.vendedor.id
   const dias = diasHastaEvento(publicacion.fechaEvento)
+  const venueInfo = publicacion.venueSlug ? getVenueBySlug(publicacion.venueSlug) : null
+  const zoneId = publicacion.venueSlug && publicacion.zona
+    ? getZoneIdByLabel(publicacion.venueSlug, publicacion.zona)
+    : undefined
 
 
   const precioNum = (publicacion.precioVentaCentimos / 100).toFixed(2)
@@ -239,29 +243,23 @@ export default async function DetalleEntradaPage({ params }: PageProps) {
           </div>
 
           {/* Mapa del recinto */}
-          {publicacion.venueSlug && (() => {
-            const venue = getVenueBySlug(publicacion.venueSlug!)
-            const zoneId = publicacion.zona
-              ? getZoneIdByLabel(publicacion.venueSlug!, publicacion.zona)
-              : undefined
-            return venue ? (
-              <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
-                <h2 className="mb-3 text-sm font-bold uppercase tracking-wider text-gray-500">
-                  Mapa del recinto — {venue.name}
-                </h2>
-                {publicacion.zona && (
-                  <p className="mb-3 text-sm text-gray-600">
-                    Tu zona: <span className="font-semibold text-gray-900">{publicacion.zona}</span>
-                  </p>
-                )}
-                <VenueMapa
-                  venueSlug={publicacion.venueSlug!}
-                  mode="display"
-                  selectedZone={zoneId ?? null}
-                />
-              </div>
-            ) : null
-          })()}
+          {venueInfo && publicacion.venueSlug && (
+            <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
+              <h2 className="mb-3 text-sm font-bold uppercase tracking-wider text-gray-500">
+                Mapa del recinto — {venueInfo.name}
+              </h2>
+              {publicacion.zona && (
+                <p className="mb-3 text-sm text-gray-600">
+                  Tu zona: <span className="font-semibold text-gray-900">{publicacion.zona}</span>
+                </p>
+              )}
+              <VenueMapa
+                venueSlug={publicacion.venueSlug}
+                mode="display"
+                selectedZone={zoneId ?? null}
+              />
+            </div>
+          )}
 
           {/* Guía de transferencia por ticketera */}
           {publicacion.ticketeraEnum && (
