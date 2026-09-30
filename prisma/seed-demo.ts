@@ -32,6 +32,8 @@ async function main() {
       precioVentaCentimos: 49000,
       descripcion: "Entrada para la tribuna norte, fila 12, asiento 22. Precio original S/ 450.",
       imagenPortadaUrl: "https://images.unsplash.com/photo-1540039155733-5bb30b4ac843?w=800&q=80&fit=crop",
+      venueSlug: "estadio-nacional",
+      zona: "Tribuna Norte",
     },
     {
       nombreEvento: "Coldplay — Music of the Spheres World Tour",
@@ -42,6 +44,8 @@ async function main() {
       precioVentaCentimos: 41500,
       descripcion: "Sector campo A. Vista perfecta al escenario principal.",
       imagenPortadaUrl: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80&fit=crop",
+      venueSlug: "estadio-nacional",
+      zona: "Campo / Piso",
     },
     {
       nombreEvento: "Karol G — Mañana Será Bonito Tour",
@@ -52,6 +56,8 @@ async function main() {
       precioVentaCentimos: 30500,
       descripcion: "Platea VIP con vista frontal al escenario.",
       imagenPortadaUrl: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=80&fit=crop",
+      venueSlug: null,
+      zona: null,
     },
 
     // DEPORTES
@@ -64,6 +70,8 @@ async function main() {
       precioVentaCentimos: 13000,
       descripcion: "Tribuna sur, entrada adulto. El partido más importante de la temporada.",
       imagenPortadaUrl: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&q=80&fit=crop",
+      venueSlug: "estadio-villanueva",
+      zona: "Tribuna Sur",
     },
     {
       nombreEvento: "Selección Peruana vs. Argentina — Eliminatorias 2026",
@@ -74,6 +82,8 @@ async function main() {
       precioVentaCentimos: 22000,
       descripcion: "Occidente norte, fila 8. Única en este precio.",
       imagenPortadaUrl: "https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=800&q=80&fit=crop",
+      venueSlug: "estadio-nacional",
+      zona: "Tribuna Norte",
     },
     {
       nombreEvento: "Liga Nacional de Vóley — Final Temporada 2026",
@@ -84,6 +94,8 @@ async function main() {
       precioVentaCentimos: 6500,
       descripcion: "Preferencial lateral. Gran partido para el cierre de temporada.",
       imagenPortadaUrl: "https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?w=800&q=80&fit=crop",
+      venueSlug: null,
+      zona: null,
     },
 
     // FESTIVALES
@@ -96,6 +108,8 @@ async function main() {
       precioVentaCentimos: 16000,
       descripcion: "Entrada general de 2 días. Bandas internacionales y nacionales.",
       imagenPortadaUrl: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80&fit=crop",
+      venueSlug: null,
+      zona: null,
     },
     {
       nombreEvento: "Reggaeton Lima Festival",
@@ -106,6 +120,8 @@ async function main() {
       precioVentaCentimos: 19500,
       descripcion: "Zona preferencial. J Balvin, Maluma y más artistas.",
       imagenPortadaUrl: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&q=80&fit=crop",
+      venueSlug: "arena-1",
+      zona: "Preferencial",
     },
     {
       nombreEvento: "Lima Jazz Festival 2026",
@@ -116,6 +132,8 @@ async function main() {
       precioVentaCentimos: 9700,
       descripcion: "Acceso general para los 3 días del festival.",
       imagenPortadaUrl: "https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=800&q=80&fit=crop",
+      venueSlug: null,
+      zona: null,
     },
 
     // TEATRO
@@ -128,6 +146,8 @@ async function main() {
       precioVentaCentimos: 27000,
       descripcion: "Platea fila 5, asiento central. Función especial de estreno.",
       imagenPortadaUrl: "https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?w=800&q=80&fit=crop",
+      venueSlug: "gran-teatro-nacional",
+      zona: "Platea Central",
     },
     {
       nombreEvento: "El Rey León — Producción Broadway",
@@ -138,6 +158,8 @@ async function main() {
       precioVentaCentimos: 19500,
       descripcion: "Balcón preferencial. Función de sábado con elenco completo.",
       imagenPortadaUrl: "https://images.unsplash.com/photo-1518834107812-67b0b7c58434?w=800&q=80&fit=crop",
+      venueSlug: null,
+      zona: null,
     },
     {
       nombreEvento: "Los Monólogos de la Vagina — Edición 20 Aniversario",
@@ -148,6 +170,8 @@ async function main() {
       precioVentaCentimos: 8500,
       descripcion: "Fila central, butaca numerada.",
       imagenPortadaUrl: "https://images.unsplash.com/photo-1503095396549-807759245b35?w=800&q=80&fit=crop",
+      venueSlug: null,
+      zona: null,
     },
 
     // OTROS
@@ -160,6 +184,8 @@ async function main() {
       precioVentaCentimos: 38000,
       descripcion: "Entrada completa de día para los 12 speakers. Incluye almuerzo.",
       imagenPortadaUrl: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&q=80&fit=crop",
+      venueSlug: null,
+      zona: null,
     },
     {
       nombreEvento: "Cirque du Soleil — KOOZA Lima",
@@ -170,6 +196,8 @@ async function main() {
       precioVentaCentimos: 24000,
       descripcion: "Zona VIP lateral, carpa principal. Espectáculo de 2h.",
       imagenPortadaUrl: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800&q=80&fit=crop",
+      venueSlug: null,
+      zona: null,
     },
     {
       nombreEvento: "World Padel Tour — Lima Open 2026",
@@ -180,6 +208,8 @@ async function main() {
       precioVentaCentimos: 5400,
       descripcion: "Acceso a todas las canchas durante el torneo.",
       imagenPortadaUrl: "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=800&q=80&fit=crop",
+      venueSlug: null,
+      zona: null,
     },
   ]
 
@@ -196,6 +226,8 @@ async function main() {
         precioVentaCentimos: pub.precioVentaCentimos,
         descripcion: pub.descripcion,
         imagenPortadaUrl: pub.imagenPortadaUrl,
+        venueSlug: pub.venueSlug,
+        zona: pub.zona,
         estado: "DISPONIBLE",
       },
     })
