@@ -1,10 +1,6 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 
-if (process.env.NODE_ENV === "production" && !process.env.ALLOW_DEV_ENDPOINTS) {
-  throw new Error("Dev endpoint in production without ALLOW_DEV_ENDPOINTS")
-}
-
 const FOTOS: Record<string, string> = {
   "Bad Bunny — Most Wanted Tour":
     "https://images.unsplash.com/photo-1540039155733-5bb30b4ac843?w=800&q=80&fit=crop",
