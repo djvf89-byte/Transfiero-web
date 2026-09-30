@@ -4,6 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
 import type { CategoriaEvento, EstadoPublicacion } from "@prisma/client"
+import { getEventPhoto } from "@/lib/event-photos"
 
 const GRADIENTE_CATEGORIA: Record<CategoriaEvento, string> = {
   CONCIERTO: "from-indigo-950 via-blue-900 to-violet-900",
@@ -92,7 +93,7 @@ export function EntradaCard({
   const dias = diasHastaEvento(fechaEvento)
   const urgente = dias <= 7 && dias >= 0
   const precio = (precioVentaCentimos / 100).toFixed(2)
-  const imagenUrl = imagenPortadaUrl ?? imagenEvidenciaUrl
+  const imagenUrl = imagenPortadaUrl ?? imagenEvidenciaUrl ?? getEventPhoto(nombreEvento)
   const [imgError, setImgError] = useState(false)
 
   return (

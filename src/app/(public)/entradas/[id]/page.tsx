@@ -13,6 +13,7 @@ import { RiesgoTicketera } from "@/components/publicaciones/RiesgoTicketera"
 import { TicketeraBadge } from "@/components/publicaciones/TicketeraBadge"
 import { getVenueBySlug, getZoneIdByLabel } from "@/lib/venues"
 import VenueMapa from "@/components/venue-maps/VenueMapa"
+import { getEventPhoto } from "@/lib/event-photos"
 
 const BASE_URL = process.env.AUTH_URL ?? "https://transfiero.pe"
 
@@ -24,7 +25,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const precio = `S/ ${(pub.precioVentaCentimos / 100).toFixed(2)}`
   const ciudad = pub.lugarEvento.split(",")[0]?.trim() ?? pub.lugarEvento
-  const imagen = pub.imagenPortadaUrl ?? pub.evidencias[0]?.url ?? `${BASE_URL}/logo-dark.png`
+  const imagen = pub.imagenPortadaUrl ?? pub.evidencias[0]?.url ?? getEventPhoto(pub.nombreEvento) ?? `${BASE_URL}/logo-dark.png`
   const url = `${BASE_URL}/entradas/${pub.id}`
 
   return {
@@ -91,7 +92,7 @@ export default async function DetalleEntradaPage({ params }: PageProps) {
   ])
 
   const gradiente = GRADIENTE_CATEGORIA[publicacion.categoria] ?? GRADIENTE_CATEGORIA.OTRO
-  const imagenUrl = publicacion.imagenPortadaUrl ?? publicacion.evidencias[0]?.url
+  const imagenUrl = publicacion.imagenPortadaUrl ?? publicacion.evidencias[0]?.url ?? getEventPhoto(publicacion.nombreEvento)
   const disponible = publicacion.estado === "DISPONIBLE"
   const autenticado = !!session
   const esPropioVendedor = session?.user.id === publicacion.vendedor.id
@@ -104,7 +105,7 @@ export default async function DetalleEntradaPage({ params }: PageProps) {
 
   const precioNum = (publicacion.precioVentaCentimos / 100).toFixed(2)
   const urlCanonica = `${BASE_URL}/entradas/${publicacion.id}`
-  const imagenOg = publicacion.imagenPortadaUrl ?? publicacion.evidencias[0]?.url
+  const imagenOg = publicacion.imagenPortadaUrl ?? publicacion.evidencias[0]?.url ?? getEventPhoto(publicacion.nombreEvento)
 
   const jsonLdEvent = {
     "@context": "https://schema.org",
