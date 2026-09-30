@@ -2,7 +2,6 @@ import { notFound } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
 import type { Metadata } from "next"
-import dynamic from "next/dynamic"
 import { auth } from "@/lib/auth"
 import { obtenerPublicacionPublica, contarVentasCompletadas, contarDisputasVendedor } from "@/services/publicacion.service"
 import { ResumenFinancieroPublico } from "@/components/operaciones/ResumenFinanciero"
@@ -13,8 +12,7 @@ import { SpotifyPlayer } from "@/components/publicaciones/SpotifyPlayer"
 import { RiesgoTicketera } from "@/components/publicaciones/RiesgoTicketera"
 import { TicketeraBadge } from "@/components/publicaciones/TicketeraBadge"
 import { getVenueBySlug, getZoneIdByLabel } from "@/lib/venues"
-
-const VenueMapa = dynamic(() => import("@/components/venue-maps/VenueMapa"), { ssr: false })
+import VenueMapa from "@/components/venue-maps/VenueMapa"
 
 const BASE_URL = process.env.AUTH_URL ?? "https://transfiero.pe"
 
